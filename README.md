@@ -33,13 +33,17 @@ Overview
 There are many examples [on the website][Nunjucks Intl], but here's a comprehensive one:
 
 ```nunjucks
-{{formatMessage (intlGet "messages.post.meta")
-    num=post.comments.length
-    ago=(formatRelative post.date)}}
+{{ formatMessage(
+    intlGet("messages.post.meta"), 
+    { 
+        num: post.comments.length, 
+        ago: formatRelative(post.date) 
+    }) 
+}}
 ```
 
 ```js
-var context = {
+var data = {
     post: {
         date    : 1422046290531,
         comments: [/*...*/]
@@ -55,14 +59,14 @@ var intlData = {
     }
 };
 
-var template = Nunjucks.compile(/* Template source above */);
+data.intl = intlData;
 
-var html = template(context, {
-    data: {intl: intlData}
-});
+var html = nunjucks.renderString(/* Template source above */, data);
 ```
 
-This example would render: **"Posted 3 days ago, 1,000 comments"** to the `html` variable. The `post.meta` message is written in the industry standard [ICU Message syntax][], which you can also learn about on the [FormatJS website][FormatJS].
+This example would render: **"Posted 3 days ago, 1,000 comments"** to the `html` variable. 
+The `post.meta` message is written in the industry standard [ICU Message syntax][], which you can 
+also learn about on the [FormatJS website][FormatJS].
 
 
 Contribute
@@ -74,7 +78,7 @@ Let's make Nunjucks Intl and FormatJS better! If you're interested in helping, a
 License
 -------
 
-This software is free to use under the Yahoo! Inc. BSD license.
+This software is free to use under the BSD license.
 See the [LICENSE file][LICENSE] for license text and copyright information.
 
 
