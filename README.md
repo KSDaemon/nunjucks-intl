@@ -70,8 +70,6 @@ Contribute
 
 Let's make Nunjucks Intl and FormatJS better! If you're interested in helping, all contributions are welcome and appreciated. Nunjucks Intl is just one of many packages that make up the [FormatJS suite of packages][FormatJS GitHub], and you can contribute to any/all of them, including the [Format JS website][FormatJS] itself.
 
-Check out the [Contributing document][CONTRIBUTING] for the details. Thanks!
-
 
 License
 -------
@@ -81,17 +79,16 @@ See the [LICENSE file][LICENSE] for license text and copyright information.
 
 
 [Nunjucks Intl]: http://formatjs.io/nunjucks/
-[Nunjucks]: http://nunjucksjs.com/
+[Nunjucks]: http://mozilla.github.io/nunjucks
 [npm]: https://www.npmjs.org/package/nunjucks-intl
 [npm-badge]: https://img.shields.io/npm/v/nunjucks-intl.svg?style=flat-square
-[travis]: https://travis-ci.org/yahoo/nunjucks-intl
-[travis-badge]: http://img.shields.io/travis/yahoo/nunjucks-intl.svg?style=flat-square
-[david]: https://david-dm.org/yahoo/nunjucks-intl
-[david-badge]: https://img.shields.io/david/yahoo/nunjucks-intl.svg?style=flat-square
+[travis]: https://travis-ci.org/KSDaemon/nunjucks-intl
+[travis-badge]: http://img.shields.io/travis/KSDaemon/nunjucks-intl.svg?style=flat-square
+[david]: https://david-dm.org/KSDaemon/nunjucks-intl
+[david-badge]: https://img.shields.io/david/KSDaemon/nunjucks-intl.svg?style=flat-square
 [sauce]: https://saucelabs.com/u/nunjucks-intl
 [sauce-badge]: https://saucelabs.com/browser-matrix/nunjucks-intl.svg
 [FormatJS]: http://formatjs.io/
 [FormatJS GitHub]: http://formatjs.io/github/
 [ICU Message syntax]: http://formatjs.io/guide/#messageformat-syntax
-[CONTRIBUTING]: https://github.com/yahoo/nunjucks-intl/blob/master/CONTRIBUTING.md
-[LICENSE]: https://github.com/yahoo/nunjucks-intl/blob/master/LICENSE
+[LICENSE]: https://github.com/KSDaemon/nunjucks-intl/blob/master/LICENSE

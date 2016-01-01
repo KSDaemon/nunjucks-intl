@@ -19,8 +19,8 @@ module.exports = function (grunt) {
 
         concat: {
             dist_with_locales: {
-                src: ['dist/handlebars-intl.js', 'dist/locale-data/*.js'],
-                dest: 'dist/handlebars-intl-with-locales.js',
+                src: ['dist/nunjucks-intl.js', 'dist/locale-data/*.js'],
+                dest: 'dist/nunjucks-intl-with-locales.js',
 
                 options: {
                     sourceMap: true
@@ -63,11 +63,11 @@ module.exports = function (grunt) {
                 options: {
                     prelude: [
                         '// GENERATED FILE',
-                        'var HandlebarsIntl = require("./handlebars-intl");\n\n'
+                        'var NunjucksIntl = require("./nunjucks-intl");\n\n'
                     ].join('\n'),
 
                     wrapEntry: function (entry) {
-                        return 'HandlebarsIntl.__addLocaleData(' + entry + ');';
+                        return 'NunjucksIntl.__addLocaleData(' + entry + ');';
                     }
                 }
             },
@@ -77,18 +77,18 @@ module.exports = function (grunt) {
 
                 options: {
                     wrapEntry: function (entry) {
-                        return 'HandlebarsIntl.__addLocaleData(' + entry + ');';
+                        return 'NunjucksIntl.__addLocaleData(' + entry + ');';
                     }
                 }
             }
         },
 
         bundle_jsnext: {
-            dest: 'dist/handlebars-intl.js',
+            dest: 'dist/nunjucks-intl.js',
 
             options: {
-                namespace : 'HandlebarsIntl',
-                sourceRoot: 'handlebars-intl/'
+                namespace : 'NunjucksIntl',
+                sourceRoot: 'nunjucks-intl/'
             }
         },
 
@@ -100,30 +100,30 @@ module.exports = function (grunt) {
             options: {
                 preserveComments       : 'some',
                 sourceMap              : true,
-                sourceMapRoot          : 'handlebars-intl/',
+                sourceMapRoot          : 'nunjucks-intl/',
                 sourceMapIncludeSources: true
             },
 
             dist: {
                 options: {
-                    sourceMapIn: 'dist/handlebars-intl.js.map'
+                    sourceMapIn: 'dist/nunjucks-intl.js.map'
                 },
 
                 files: {
-                    'dist/handlebars-intl.min.js': [
-                        'dist/handlebars-intl.js'
+                    'dist/nunjucks-intl.min.js': [
+                        'dist/nunjucks-intl.js'
                     ]
                 }
             },
 
             dist_with_locales: {
                 options: {
-                    sourceMapIn: 'dist/handlebars-intl-with-locales.js.map'
+                    sourceMapIn: 'dist/nunjucks-intl-with-locales.js.map'
                 },
 
                 files: {
-                    'dist/handlebars-intl-with-locales.min.js': [
-                        'dist/handlebars-intl-with-locales.js'
+                    'dist/nunjucks-intl-with-locales.min.js': [
+                        'dist/nunjucks-intl-with-locales.js'
                     ]
                 }
             }
