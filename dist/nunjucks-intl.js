@@ -2379,8 +2379,7 @@
 
     function $$helpers$$registerWith(Nunjucks) {
         var SafeString  = Nunjucks.SafeString,
-            createFrame = Nunjucks.createFrame,
-            escape      = Nunjucks.Utils.escapeExpression;
+            createFrame = Nunjucks.createFrame;
 
         var helpers = {
             intl             : intl,
@@ -2560,7 +2559,7 @@
 
                     // Escape string value.
                     if (typeof value === 'string') {
-                        hash[key] = escape(value);
+                        hash[key] = this.escape(value);
                     }
                 }
             }
