@@ -1,9 +1,3 @@
-/*
-Copyright (c) 2014, Yahoo! Inc. All rights reserved.
-Copyrights licensed under the New BSD License.
-See the accompanying LICENSE file for terms.
-*/
-
 /* jshint esnext: true */
 
 import IntlMessageFormat from 'intl-messageformat';
@@ -34,35 +28,13 @@ function registerWith(Nunjucks) {
         formatRelative   : formatRelative,
         formatNumber     : formatNumber,
         formatMessage    : formatMessage,
-        formatHTMLMessage: formatHTMLMessage,
-
-        // Deprecated helpers (renamed):
-        intlDate       : deprecate('intlDate', formatDate),
-        intlTime       : deprecate('intlTime', formatTime),
-        intlNumber     : deprecate('intlNumber', formatNumber),
-        intlMessage    : deprecate('intlMessage', formatMessage),
-        intlHTMLMessage: deprecate('intlHTMLMessage', formatHTMLMessage)
+        formatHTMLMessage: formatHTMLMessage
     };
 
     for (var name in helpers) {
         if (helpers.hasOwnProperty(name)) {
-            Nunjucks.registerHelper(name, helpers[name]);
+            Nunjucks.addGlobal(name, helpers[name]);
         }
-    }
-
-    function deprecate(name, suggestion) {
-        return function () {
-            if (typeof console !== 'undefined' &&
-                typeof console.warn === 'function') {
-
-                console.warn(
-                    '{{' + name + '}} is deprecated, use: ' +
-                    '{{' + suggestion.name + '}}'
-                );
-            }
-
-            return suggestion.apply(this, arguments);
-        };
     }
 
     // -- Helpers --------------------------------------------------------------
@@ -84,8 +56,8 @@ function registerWith(Nunjucks) {
         return options.fn(this, {data: data});
     }
 
-    function intlGet(path, options) {
-        var intlData  = options.data && options.data.intl,
+    function intlGet(path) {
+        var intlData  = this.lookup('intl'),
             pathParts = path.split('.');
 
         var obj, len, i;
@@ -114,7 +86,7 @@ function registerWith(Nunjucks) {
             format  = null;
         }
 
-        var locales       = options.data.intl && options.data.intl.locales;
+        var locales       = this.lookup('intl').locales;
         var formatOptions = getFormatOptions('date', format, options);
 
         return getDateTimeFormat(locales, formatOptions).format(date);
@@ -129,7 +101,7 @@ function registerWith(Nunjucks) {
             format  = null;
         }
 
-        var locales       = options.data.intl && options.data.intl.locales;
+        var locales       = this.lookup('intl').locales;
         var formatOptions = getFormatOptions('time', format, options);
 
         return getDateTimeFormat(locales, formatOptions).format(date);
@@ -144,7 +116,7 @@ function registerWith(Nunjucks) {
             format  = null;
         }
 
-        var locales       = options.data.intl && options.data.intl.locales;
+        var locales       = this.lookup('intl').locales;
         var formatOptions = getFormatOptions('relative', format, options);
         var now           = options.hash.now;
 
@@ -165,7 +137,7 @@ function registerWith(Nunjucks) {
             format  = null;
         }
 
-        var locales       = options.data.intl && options.data.intl.locales;
+        var locales       = this.lookup('intl').locales;
         var formatOptions = getFormatOptions('number', format, options);
 
         return getNumberFormat(locales, formatOptions).format(num);
@@ -187,7 +159,7 @@ function registerWith(Nunjucks) {
             );
         }
 
-        var intlData = options.data.intl || {},
+        var intlData = this.lookup('intl') || {},
             locales  = intlData.locales,
             formats  = intlData.formats;
 

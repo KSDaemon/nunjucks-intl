@@ -2390,35 +2390,13 @@
             formatRelative   : formatRelative,
             formatNumber     : formatNumber,
             formatMessage    : formatMessage,
-            formatHTMLMessage: formatHTMLMessage,
-
-            // Deprecated helpers (renamed):
-            intlDate       : deprecate('intlDate', formatDate),
-            intlTime       : deprecate('intlTime', formatTime),
-            intlNumber     : deprecate('intlNumber', formatNumber),
-            intlMessage    : deprecate('intlMessage', formatMessage),
-            intlHTMLMessage: deprecate('intlHTMLMessage', formatHTMLMessage)
+            formatHTMLMessage: formatHTMLMessage
         };
 
         for (var name in helpers) {
             if (helpers.hasOwnProperty(name)) {
-                Nunjucks.registerHelper(name, helpers[name]);
+                Nunjucks.addGlobal(name, helpers[name]);
             }
-        }
-
-        function deprecate(name, suggestion) {
-            return function () {
-                if (typeof console !== 'undefined' &&
-                    typeof console.warn === 'function') {
-
-                    console.warn(
-                        '{{' + name + '}} is deprecated, use: ' +
-                        '{{' + suggestion.name + '}}'
-                    );
-                }
-
-                return suggestion.apply(this, arguments);
-            };
         }
 
         // -- Helpers --------------------------------------------------------------
@@ -2440,8 +2418,8 @@
             return options.fn(this, {data: data});
         }
 
-        function intlGet(path, options) {
-            var intlData  = options.data && options.data.intl,
+        function intlGet(path) {
+            var intlData  = this.lookup('intl'),
                 pathParts = path.split('.');
 
             var obj, len, i;
@@ -2470,7 +2448,7 @@
                 format  = null;
             }
 
-            var locales       = options.data.intl && options.data.intl.locales;
+            var locales       = this.lookup('intl').locales;
             var formatOptions = getFormatOptions('date', format, options);
 
             return $$helpers$$getDateTimeFormat(locales, formatOptions).format(date);
@@ -2485,7 +2463,7 @@
                 format  = null;
             }
 
-            var locales       = options.data.intl && options.data.intl.locales;
+            var locales       = this.lookup('intl').locales;
             var formatOptions = getFormatOptions('time', format, options);
 
             return $$helpers$$getDateTimeFormat(locales, formatOptions).format(date);
@@ -2500,7 +2478,7 @@
                 format  = null;
             }
 
-            var locales       = options.data.intl && options.data.intl.locales;
+            var locales       = this.lookup('intl').locales;
             var formatOptions = getFormatOptions('relative', format, options);
             var now           = options.hash.now;
 
@@ -2521,7 +2499,7 @@
                 format  = null;
             }
 
-            var locales       = options.data.intl && options.data.intl.locales;
+            var locales       = this.lookup('intl').locales;
             var formatOptions = getFormatOptions('number', format, options);
 
             return $$helpers$$getNumberFormat(locales, formatOptions).format(num);
@@ -2543,7 +2521,7 @@
                 );
             }
 
-            var intlData = options.data.intl || {},
+            var intlData = this.lookup('intl') || {},
                 locales  = intlData.locales,
                 formats  = intlData.formats;
 
@@ -2626,16 +2604,16 @@
         }
     }
     var $$en$$default = {"locale":"en","pluralRuleFunction":function (n,ord){var s=String(n).split("."),v0=!s[1],t0=Number(s[0])==n,n10=t0&&s[0].slice(-1),n100=t0&&s[0].slice(-2);if(ord)return n10==1&&n100!=11?"one":n10==2&&n100!=12?"two":n10==3&&n100!=13?"few":"other";return n==1&&v0?"one":"other"},"fields":{"year":{"displayName":"Year","relative":{"0":"this year","1":"next year","-1":"last year"},"relativeTime":{"future":{"one":"in {0} year","other":"in {0} years"},"past":{"one":"{0} year ago","other":"{0} years ago"}}},"month":{"displayName":"Month","relative":{"0":"this month","1":"next month","-1":"last month"},"relativeTime":{"future":{"one":"in {0} month","other":"in {0} months"},"past":{"one":"{0} month ago","other":"{0} months ago"}}},"day":{"displayName":"Day","relative":{"0":"today","1":"tomorrow","-1":"yesterday"},"relativeTime":{"future":{"one":"in {0} day","other":"in {0} days"},"past":{"one":"{0} day ago","other":"{0} days ago"}}},"hour":{"displayName":"Hour","relativeTime":{"future":{"one":"in {0} hour","other":"in {0} hours"},"past":{"one":"{0} hour ago","other":"{0} hours ago"}}},"minute":{"displayName":"Minute","relativeTime":{"future":{"one":"in {0} minute","other":"in {0} minutes"},"past":{"one":"{0} minute ago","other":"{0} minutes ago"}}},"second":{"displayName":"Second","relative":{"0":"now"},"relativeTime":{"future":{"one":"in {0} second","other":"in {0} seconds"},"past":{"one":"{0} second ago","other":"{0} seconds ago"}}}}};
-    function $$handlebars$intl$$__addLocaleData(data) {
+    function $$nunjucks$intl$$__addLocaleData(data) {
         intl$messageformat$$default.__addLocaleData(data);
         intl$relativeformat$$default.__addLocaleData(data);
     }
 
-    $$handlebars$intl$$__addLocaleData($$en$$default);
+    $$nunjucks$intl$$__addLocaleData($$en$$default);
 
     var src$main$$default = {
         registerWith   : $$helpers$$registerWith,
-        __addLocaleData: $$handlebars$intl$$__addLocaleData
+        __addLocaleData: $$nunjucks$intl$$__addLocaleData
     };
 
     this['NunjucksIntl'] = src$main$$default;
