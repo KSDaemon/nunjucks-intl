@@ -72,7 +72,10 @@ also learn about on the [FormatJS website][FormatJS].
 Contribute
 ----------
 
-Let's make Nunjucks Intl and FormatJS better! If you're interested in helping, all contributions are welcome and appreciated. Nunjucks Intl is just one of many packages that make up the [FormatJS suite of packages][FormatJS GitHub], and you can contribute to any/all of them, including the [Format JS website][FormatJS] itself.
+Let's make Nunjucks Intl and FormatJS better! If you're interested in helping, all contributions 
+are welcome and appreciated. Nunjucks Intl is just one of many packages that make up the 
+[FormatJS suite of packages][FormatJS GitHub], and you can contribute to any/all of them, 
+including the [Format JS website][FormatJS] itself.
 
 
 License
