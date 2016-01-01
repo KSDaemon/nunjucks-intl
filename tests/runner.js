@@ -1,4 +1,4 @@
-/* global Handlebars, Intl, IntlPolyfill */
+/* global Nunjucks, Intl, IntlPolyfill */
 /* jshint node:true */
 'use strict';
 
@@ -7,9 +7,9 @@ require('intl');
 Intl.NumberFormat   = IntlPolyfill.NumberFormat;
 Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
 
-global.Handlebars = require('handlebars');
+global.Nunjucks = require('handlebars');
 global.expect = require('expect.js');
 
-require('../').registerWith(Handlebars);
+require('../').registerWith(Nunjucks);
 
 require('./helpers');

@@ -1,7 +1,7 @@
-[Handlebars Intl][]
+[Nunjucks Intl][]
 ===================
 
-This library provides [Handlebars][] helpers for internationalization. The helpers provide a declarative way to format dates, numbers, and string messages with pluralization support.
+This library provides [Nunjucks][] helpers for internationalization. The helpers provide a declarative way to format dates, numbers, and string messages with pluralization support.
 
 [![npm Version][npm-badge]][npm]
 [![Build Status][travis-badge]][travis]
@@ -9,14 +9,14 @@ This library provides [Handlebars][] helpers for internationalization. The helpe
 
 [![Sauce Test Status][sauce-badge]][sauce]
 
-**This package used to be named `handlebars-helper-intl`.**
+**This package used to be named `nunjucks-helper-intl`.**
 
 
 Overview
 --------
 
-**Handlebars Intl is part of [FormatJS][], the docs can be found on the webiste:**
-**<http://formatjs.io/handlebars/>**
+**Nunjucks Intl is part of [FormatJS][], the docs can be found on the webiste:**
+**<http://formatjs.io/nunjucks/>**
 
 ### Features
 
@@ -30,9 +30,9 @@ Overview
 
 ### Example
 
-There are many examples [on the website][Handlebars Intl], but here's a comprehensive one:
+There are many examples [on the website][Nunjucks Intl], but here's a comprehensive one:
 
-```handlebars
+```nunjucks
 {{formatMessage (intlGet "messages.post.meta")
     num=post.comments.length
     ago=(formatRelative post.date)}}
@@ -55,7 +55,7 @@ var intlData = {
     }
 };
 
-var template = Handlebars.compile(/* Template source above */);
+var template = Nunjucks.compile(/* Template source above */);
 
 var html = template(context, {
     data: {intl: intlData}
@@ -68,7 +68,7 @@ This example would render: **"Posted 3 days ago, 1,000 comments"** to the `html`
 Contribute
 ----------
 
-Let's make Handlebars Intl and FormatJS better! If you're interested in helping, all contributions are welcome and appreciated. Handlebars Intl is just one of many packages that make up the [FormatJS suite of packages][FormatJS GitHub], and you can contribute to any/all of them, including the [Format JS website][FormatJS] itself.
+Let's make Nunjucks Intl and FormatJS better! If you're interested in helping, all contributions are welcome and appreciated. Nunjucks Intl is just one of many packages that make up the [FormatJS suite of packages][FormatJS GitHub], and you can contribute to any/all of them, including the [Format JS website][FormatJS] itself.
 
 Check out the [Contributing document][CONTRIBUTING] for the details. Thanks!
 
@@ -80,18 +80,18 @@ This software is free to use under the Yahoo! Inc. BSD license.
 See the [LICENSE file][LICENSE] for license text and copyright information.
 
 
-[Handlebars Intl]: http://formatjs.io/handlebars/
-[Handlebars]: http://handlebarsjs.com/
-[npm]: https://www.npmjs.org/package/handlebars-intl
-[npm-badge]: https://img.shields.io/npm/v/handlebars-intl.svg?style=flat-square
-[travis]: https://travis-ci.org/yahoo/handlebars-intl
-[travis-badge]: http://img.shields.io/travis/yahoo/handlebars-intl.svg?style=flat-square
-[david]: https://david-dm.org/yahoo/handlebars-intl
-[david-badge]: https://img.shields.io/david/yahoo/handlebars-intl.svg?style=flat-square
-[sauce]: https://saucelabs.com/u/handlebars-intl
-[sauce-badge]: https://saucelabs.com/browser-matrix/handlebars-intl.svg
+[Nunjucks Intl]: http://formatjs.io/nunjucks/
+[Nunjucks]: http://nunjucksjs.com/
+[npm]: https://www.npmjs.org/package/nunjucks-intl
+[npm-badge]: https://img.shields.io/npm/v/nunjucks-intl.svg?style=flat-square
+[travis]: https://travis-ci.org/yahoo/nunjucks-intl
+[travis-badge]: http://img.shields.io/travis/yahoo/nunjucks-intl.svg?style=flat-square
+[david]: https://david-dm.org/yahoo/nunjucks-intl
+[david-badge]: https://img.shields.io/david/yahoo/nunjucks-intl.svg?style=flat-square
+[sauce]: https://saucelabs.com/u/nunjucks-intl
+[sauce-badge]: https://saucelabs.com/browser-matrix/nunjucks-intl.svg
 [FormatJS]: http://formatjs.io/
 [FormatJS GitHub]: http://formatjs.io/github/
 [ICU Message syntax]: http://formatjs.io/guide/#messageformat-syntax
-[CONTRIBUTING]: https://github.com/yahoo/handlebars-intl/blob/master/CONTRIBUTING.md
-[LICENSE]: https://github.com/yahoo/handlebars-intl/blob/master/LICENSE
+[CONTRIBUTING]: https://github.com/yahoo/nunjucks-intl/blob/master/CONTRIBUTING.md
+[LICENSE]: https://github.com/yahoo/nunjucks-intl/blob/master/LICENSE

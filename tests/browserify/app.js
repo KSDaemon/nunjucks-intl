@@ -1,10 +1,10 @@
-/* global Handlebars */
+/* global Nunjucks */
 'use strict';
 
-var HandlebarsIntl = require('../../');
+var NunjucksIntl = require('../../');
 require('../../lib/locales.js');
 
-global.Handlebars = require('handlebars');
-HandlebarsIntl.registerWith(Handlebars);
+global.Nunjucks = require('handlebars');
+NunjucksIntl.registerWith(Nunjucks);
 
 require('../helpers.js');

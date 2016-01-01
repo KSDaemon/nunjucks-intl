@@ -2,12 +2,12 @@
 
 global.Intl || require('intl');
 
-var Handlebars     = require('handlebars'),
+var Nunjucks     = require('handlebars'),
     hbsIntlHelpers = require('../../');
 
-hbsIntlHelpers.registerWith(Handlebars);
+hbsIntlHelpers.registerWith(Nunjucks);
 
-var formatNumber = Handlebars.helpers.formatNumber;
+var formatNumber = Nunjucks.helpers.formatNumber;
 
 module.exports = function () {
     formatNumber(4000, {

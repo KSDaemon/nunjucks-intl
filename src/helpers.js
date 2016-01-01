@@ -21,10 +21,10 @@ var getDateTimeFormat = createFormatCache(Intl.DateTimeFormat);
 var getMessageFormat  = createFormatCache(IntlMessageFormat);
 var getRelativeFormat = createFormatCache(IntlRelativeFormat);
 
-function registerWith(Handlebars) {
-    var SafeString  = Handlebars.SafeString,
-        createFrame = Handlebars.createFrame,
-        escape      = Handlebars.Utils.escapeExpression;
+function registerWith(Nunjucks) {
+    var SafeString  = Nunjucks.SafeString,
+        createFrame = Nunjucks.createFrame,
+        escape      = Nunjucks.Utils.escapeExpression;
 
     var helpers = {
         intl             : intl,
@@ -46,7 +46,7 @@ function registerWith(Handlebars) {
 
     for (var name in helpers) {
         if (helpers.hasOwnProperty(name)) {
-            Handlebars.registerHelper(name, helpers[name]);
+            Nunjucks.registerHelper(name, helpers[name]);
         }
     }
 
@@ -179,7 +179,7 @@ function registerWith(Handlebars) {
 
         var hash = options.hash;
 
-        // TODO: remove support form `hash.intlName` once Handlebars bugs with
+        // TODO: remove support form `hash.intlName` once Nunjucks bugs with
         // subexpressions are fixed.
         if (!(message || typeof message === 'string' || hash.intlName)) {
             throw new ReferenceError(
@@ -231,7 +231,7 @@ function registerWith(Handlebars) {
             }
         }
 
-        // Return a Handlebars `SafeString`. This first unwraps the result to
+        // Return a Nunjucks `SafeString`. This first unwraps the result to
         // make sure it's not returning a double-wrapped `SafeString`.
         return new SafeString(String(formatMessage.apply(this, arguments)));
     }

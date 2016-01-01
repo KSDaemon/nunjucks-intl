@@ -1,24 +1,25 @@
 {
-  "name": "handlebars-intl",
-  "version": "1.1.1",
-  "description": "Handlebars helpers for internationalization.",
+  "name": "nunjucks-intl",
+  "version": "0.0.1",
+  "description": "Nunjucks helpers for internationalization.",
   "keywords": [
     "intl",
     "i18n",
-    "handlebars"
+    "nunjucks"
   ],
-  "author": "Eric Ferraiuolo <edf@ericf.me>",
+  "author": "Konstantin Burkalev <KSDaemon@ya.ru>",
   "contributors": [
+    "Eric Ferraiuolo <edf@ericf.me>",
     "Drew Folta <drew@folta.net>",
     "Caridy Patino <caridy@gmail.com>",
     "Anthony Pipkin <a.pipkin@yahoo.com>"
   ],
   "bugs": {
-    "url": "https://github.com/yahoo/handlebars-intl/issues"
+    "url": "https://github.com/KSDaemon/nunjucks-intl/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:yahoo/handlebars-intl.git"
+    "url": "git@github.com:KSDaemon/nunjucks-intl.git"
   },
   "main": "index.js",
   "jsnext:main": "src/main.js",
@@ -59,7 +60,7 @@
     "test": "istanbul cover -x lib/locales.js -- ./node_modules/mocha/bin/_mocha tests/runner.js --reporter spec",
     "travis": "istanbul cover -x lib/locales.js -- _mocha tests/runner.js --reporter spec && ./saucelabs.sh"
   },
-  "homepage": "https://github.com/yahoo/handlebars-intl",
+  "homepage": "https://github.com/KSDaemon/nunjucks-intl",
   "directories": {
     "test": "tests"
   },

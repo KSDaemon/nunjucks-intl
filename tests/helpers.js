@@ -1,4 +1,4 @@
-/* global describe, it, expect, locale, Intl, IntlPolyfill, Handlebars */
+/* global describe, it, expect, locale, Intl, IntlPolyfill, Nunjucks */
 /* jshint node:true, expr:true */
 
 'use strict';
@@ -18,20 +18,20 @@ function intlBlock(content, options) {
     open  = '{{#intl ' + hash.join(' ') + '}}';
     close = '{{/intl}}';
 
-    return Handlebars.compile(open + content + close);
+    return Nunjucks.compile(open + content + close);
 }
 
 describe('Helper `formatNumber`', function () {
-    it('should be added to Handlebars', function () {
-        expect(Handlebars.helpers).to.have.keys('formatNumber');
+    it('should be added to Nunjucks', function () {
+        expect(Nunjucks.helpers).to.have.keys('formatNumber');
     });
 
     it('should be a function', function () {
-        expect(Handlebars.helpers.formatNumber).to.be.a('function');
+        expect(Nunjucks.helpers.formatNumber).to.be.a('function');
     });
 
     it('should throw if called with out a value', function () {
-        expect(Handlebars.compile('{{formatNumber}}')).to.throwException(function (e) {
+        expect(Nunjucks.compile('{{formatNumber}}')).to.throwException(function (e) {
             expect(e).to.be.a(TypeError);
         });
     });
@@ -149,16 +149,16 @@ describe('Helper `formatNumber`', function () {
 });
 
 describe('Helper `formatDate`', function () {
-    it('should be added to Handlebars', function () {
-        expect(Handlebars.helpers).to.have.keys('formatDate');
+    it('should be added to Nunjucks', function () {
+        expect(Nunjucks.helpers).to.have.keys('formatDate');
     });
 
     it('should be a function', function () {
-        expect(Handlebars.helpers.formatDate).to.be.a('function');
+        expect(Nunjucks.helpers.formatDate).to.be.a('function');
     });
 
     it('should throw if called with out a value', function () {
-        expect(Handlebars.compile('{{formatDate}}')).to.throwException(function (e) {
+        expect(Nunjucks.compile('{{formatDate}}')).to.throwException(function (e) {
             expect(e).to.be.a(TypeError);
         });
     });
@@ -188,16 +188,16 @@ describe('Helper `formatDate`', function () {
 });
 
 describe('Helper `formatTime`', function () {
-    it('should be added to Handlebars', function () {
-        expect(Handlebars.helpers).to.have.keys('formatTime');
+    it('should be added to Nunjucks', function () {
+        expect(Nunjucks.helpers).to.have.keys('formatTime');
     });
 
     it('should be a function', function () {
-        expect(Handlebars.helpers.formatTime).to.be.a('function');
+        expect(Nunjucks.helpers.formatTime).to.be.a('function');
     });
 
     it('should throw if called with out a value', function () {
-        expect(Handlebars.compile('{{formatTime}}')).to.throwException(function (e) {
+        expect(Nunjucks.compile('{{formatTime}}')).to.throwException(function (e) {
             expect(e).to.be.a(TypeError);
         });
     });
@@ -222,16 +222,16 @@ describe('Helper `formatTime`', function () {
 });
 
 describe('Helper `formatRelative`', function () {
-    it('should be added to Handlebars', function () {
-        expect(Handlebars.helpers).to.have.keys('formatRelative');
+    it('should be added to Nunjucks', function () {
+        expect(Nunjucks.helpers).to.have.keys('formatRelative');
     });
 
     it('should be a function', function () {
-        expect(Handlebars.helpers.formatRelative).to.be.a('function');
+        expect(Nunjucks.helpers.formatRelative).to.be.a('function');
     });
 
     it('should throw if called with out a value', function () {
-        expect(Handlebars.compile('{{formatRelative}}')).to.throwException(function (e) {
+        expect(Nunjucks.compile('{{formatRelative}}')).to.throwException(function (e) {
             expect(e).to.be.a(TypeError);
         });
     });
@@ -260,16 +260,16 @@ describe('Helper `formatRelative`', function () {
 });
 
 describe('Helper `formatMessage`', function () {
-    it('should be added to Handlebars', function () {
-        expect(Handlebars.helpers).to.have.keys('formatMessage');
+    it('should be added to Nunjucks', function () {
+        expect(Nunjucks.helpers).to.have.keys('formatMessage');
     });
 
     it('should be a function', function () {
-        expect(Handlebars.helpers.formatMessage).to.be.a('function');
+        expect(Nunjucks.helpers.formatMessage).to.be.a('function');
     });
 
     it('should throw if called with out a value', function () {
-        expect(Handlebars.compile('{{formatMessage}}')).to.throwException(function (e) {
+        expect(Nunjucks.compile('{{formatMessage}}')).to.throwException(function (e) {
             expect(e).to.be.a(ReferenceError);
         });
     });
@@ -336,12 +336,12 @@ describe('Helper `formatMessage`', function () {
 });
 
 describe('Helper `intl`', function () {
-    it('should be added to Handlebars', function () {
-        expect(Handlebars.helpers).to.have.keys('intl');
+    it('should be added to Nunjucks', function () {
+        expect(Nunjucks.helpers).to.have.keys('intl');
     });
 
     it('should be a function', function () {
-        expect(Handlebars.helpers.intl).to.be.a('function');
+        expect(Nunjucks.helpers.intl).to.be.a('function');
     });
 
     describe('should provide formats', function () {
@@ -358,7 +358,7 @@ describe('Helper `intl`', function () {
                     },
                     NUM: 40000.004
                 };
-            expect(Handlebars.compile(tmpl)(ctx)).to.equal('$40,000.00 €40,000.00 $40,000.00');
+            expect(Nunjucks.compile(tmpl)(ctx)).to.equal('$40,000.00 €40,000.00 $40,000.00');
         });
 
         it('for formatDate', function () {
@@ -373,7 +373,7 @@ describe('Helper `intl`', function () {
                     }
                 },
                 d = new Date(timeStamp);
-            expect(Handlebars.compile(tmpl)(ctx)).to.equal("11:00 PM");
+            expect(Nunjucks.compile(tmpl)(ctx)).to.equal("11:00 PM");
         });
 
         it('for formatMessage', function () {
@@ -393,7 +393,7 @@ describe('Helper `intl`', function () {
                     DEADLINE: timeStamp,
                     TZ: 'UTC'
                 };
-            expect(Handlebars.compile(tmpl)(ctx)).to.equal("oranges cost $40,000.00 (or €40,000.00) if ordered by January 23, 2014");
+            expect(Nunjucks.compile(tmpl)(ctx)).to.equal("oranges cost $40,000.00 (or €40,000.00) if ordered by January 23, 2014");
         });
     });
 });
