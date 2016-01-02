@@ -81,12 +81,16 @@ function registerWith(Nunjucks) {
         assertIsDate(date, 'A date or timestamp must be provided to {{formatDate}}');
 
         if (!options) {
-            options = format;
-            format  = null;
+            if (typeof format === 'object') {
+                options = format;
+                format  = null;
+            } else {
+                options = {};
+            }
         }
 
         var locales       = this.lookup('intl').locales;
-        var formatOptions = getFormatOptions('date', format, options);
+        var formatOptions = getFormatOptions(this, 'date', format, options);
 
         return getDateTimeFormat(locales, formatOptions).format(date);
     }
@@ -96,12 +100,16 @@ function registerWith(Nunjucks) {
         assertIsDate(date, 'A date or timestamp must be provided to {{formatTime}}');
 
         if (!options) {
-            options = format;
-            format  = null;
+            if (typeof format === 'object') {
+                options = format;
+                format  = null;
+            } else {
+                options = {};
+            }
         }
 
         var locales       = this.lookup('intl').locales;
-        var formatOptions = getFormatOptions('time', format, options);
+        var formatOptions = getFormatOptions(this, 'time', format, options);
 
         return getDateTimeFormat(locales, formatOptions).format(date);
     }
@@ -111,38 +119,45 @@ function registerWith(Nunjucks) {
         assertIsDate(date, 'A date or timestamp must be provided to {{formatRelative}}');
 
         if (!options) {
-            options = format;
-            format  = null;
+            if (typeof format === 'object') {
+                options = format;
+                format  = null;
+            } else {
+                options = {};
+            }
         }
 
         var locales       = this.lookup('intl').locales;
-        var formatOptions = getFormatOptions('relative', format, options);
-        var now           = options.hash.now;
+        var formatOptions = getFormatOptions(this, 'relative', format, options);
+        var now           = options.now;
 
         // Remove `now` from the options passed to the `IntlRelativeFormat`
         // constructor, because it's only used when calling `format()`.
         delete formatOptions.now;
 
-        return getRelativeFormat(locales, formatOptions).format(date, {
-            now: now
-        });
+        return getRelativeFormat(locales, formatOptions).format(date, { now: now });
     }
 
     function formatNumber(num, format, options) {
         assertIsNumber(num, 'A number must be provided to {{formatNumber}}');
 
         if (!options) {
-            options = format;
-            format  = null;
+            if (typeof format === 'object') {
+                options = format;
+                format  = null;
+            } else {
+                options = {};
+            }
         }
 
         var locales       = this.lookup('intl').locales;
-        var formatOptions = getFormatOptions('number', format, options);
+        var formatOptions = getFormatOptions(this, 'number', format, options);
 
         return getNumberFormat(locales, formatOptions).format(num);
     }
 
     function formatMessage(message, options) {
+
         if (!options) {
             options = message;
             message = null;
@@ -223,18 +238,18 @@ function registerWith(Nunjucks) {
         }
     }
 
-    function getFormatOptions(type, format, options) {
-        var hash = options.hash;
+    function getFormatOptions(self, type, format, options) {
         var formatOptions;
 
+        console.log(type, format, options);
         if (format) {
             if (typeof format === 'string') {
-                formatOptions = intlGet('formats.' + type + '.' + format, options);
+                formatOptions = intlGet.call(self, 'formats.' + type + '.' + format, options);
             }
 
-            formatOptions = extend({}, formatOptions, hash);
+            formatOptions = extend({}, formatOptions, options);
         } else {
-            formatOptions = hash;
+            formatOptions = options;
         }
 
         return formatOptions;
