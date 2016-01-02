@@ -159,15 +159,15 @@ function registerWith(Nunjucks) {
     function formatMessage(message, options) {
 
         if (!options) {
-            options = message;
-            message = null;
+            if (typeof message === 'object') {
+                options = message;
+                message  = null;
+            } else {
+                options = {};
+            }
         }
 
-        var hash = options.hash;
-
-        // TODO: remove support form `hash.intlName` once Nunjucks bugs with
-        // subexpressions are fixed.
-        if (!(message || typeof message === 'string' || hash.intlName)) {
+        if (!(message || typeof message === 'string' || options.intlName)) {
             throw new ReferenceError(
                 '{{formatMessage}} must be provided a message or intlName'
             );
@@ -179,22 +179,22 @@ function registerWith(Nunjucks) {
 
         // Lookup message by path name. User must supply the full path to the
         // message on `options.data.intl`.
-        if (!message && hash.intlName) {
-            message = intlGet(hash.intlName, options);
+        if (!message && options.intlName) {
+            message = intlGet.call(this, options.intlName, options);
         }
 
         // When `message` is a function, assume it's an IntlMessageFormat
         // instance's `format()` method passed by reference, and call it. This
         // is possible because its `this` will be pre-bound to the instance.
         if (typeof message === 'function') {
-            return message(hash);
+            return message(options);
         }
 
         if (typeof message === 'string') {
             message = getMessageFormat(message, locales, formats);
         }
 
-        return message.format(hash);
+        return message.format(options);
     }
 
     function formatHTMLMessage() {
