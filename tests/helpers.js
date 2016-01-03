@@ -316,6 +316,17 @@ describe('Helper `formatMessage`', function () {
                 intl: { locales: 'en-US' }
             });
         expect(tmpl).to.equal('Hi, my name is Anthony Pipkin.');
+
+        tmpl = Nunjucks.renderString('{{ formatMessage({ firstName: firstName, lastName: lastName, intlName: "MSG" }) }}',
+            {
+                firstName: 'Anthony',
+                lastName : 'Pipkin',
+                intl: {
+                    MSG      : 'Hi, my name is {firstName} {lastName}.',
+                    locales: 'en-US'
+                }
+            });
+        expect(tmpl).to.equal('Hi, my name is Anthony Pipkin.');
     });
 
     it('should return a formatted string with formatted numbers and dates', function () {
@@ -364,6 +375,46 @@ describe('Helper `formatMessage`', function () {
                 intl: { locales: 'en-US' }
             });
         expect(tmpl).to.equal('This is my 3rd birthday.');
+    });
+});
+
+describe('Helper `formatHTMLMessage`', function () {
+    it('should be added to Nunjucks', function () {
+        expect(Nunjucks.globals).to.have.keys('formatHTMLMessage');
+    });
+
+    it('should be a function', function () {
+        expect(Nunjucks.globals.formatMessage).to.be.a('function');
+    });
+
+    it('should throw if called with out a value'/*, function () {
+        expect(Nunjucks.renderString('{{ formatMessage() }}')).to.throwException(function (e) {
+            expect(e).to.be.a(ReferenceError);
+        });
+    }*/);
+
+    it('should return a string, that contains HTML entities', function () {
+        var tmpl = Nunjucks.renderString('{{ formatHTMLMessage(intlGet("MSG"), { firstName: firstName, lastName: lastName }) }}',
+            {
+                firstName: '<Anthony>',
+                lastName : '<Pipkin>',
+                intl: {
+                    MSG : 'Hi, my <name> is {firstName} {lastName}.',
+                    locales: 'en-US'
+                }
+            });
+        expect(tmpl).to.equal('Hi, my <name> is &lt;Anthony&gt; &lt;Pipkin&gt;.');
+
+        tmpl = Nunjucks.renderString('{{ formatHTMLMessage({ firstName: firstName, lastName: lastName, intlName: "MSG" }) }}',
+            {
+                firstName: '<Anthony>',
+                lastName : '<Pipkin>',
+                intl: {
+                    MSG      : 'Hi, my <name> is {firstName} {lastName}.',
+                    locales: 'en-US'
+                }
+            });
+        expect(tmpl).to.equal('Hi, my <name> is &lt;Anthony&gt; &lt;Pipkin&gt;.');
     });
 });
 
