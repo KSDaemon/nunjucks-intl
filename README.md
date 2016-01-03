@@ -7,8 +7,6 @@ This library provides [Nunjucks][] helpers for internationalization. The helpers
 [![Build Status][travis-badge]][travis]
 [![Dependency Status][david-badge]][david]
 
-[![Sauce Test Status][sauce-badge]][sauce]
-
 **This package used to be named `nunjucks-helper-intl`.**
 
 
