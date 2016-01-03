@@ -98,6 +98,7 @@ module.exports = function (grunt) {
 
         uglify: {
             options: {
+                //console: false,
                 preserveComments       : 'some',
                 sourceMap              : true,
                 sourceMapRoot          : 'nunjucks-intl/',

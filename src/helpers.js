@@ -16,11 +16,9 @@ var getMessageFormat  = createFormatCache(IntlMessageFormat);
 var getRelativeFormat = createFormatCache(IntlRelativeFormat);
 
 function registerWith(Nunjucks) {
-    var SafeString  = Nunjucks.SafeString,
-        createFrame = Nunjucks.Frame;
+    var createFrame = Nunjucks.Frame;
 
     var helpers = {
-        intl             : intl,
         intlGet          : intlGet,
         formatDate       : formatDate,
         formatTime       : formatTime,
@@ -36,11 +34,45 @@ function registerWith(Nunjucks) {
         }
     }
 
+    // intl custom tags are added through extension API
+    Nunjucks.addExtension('intl', new intl());
+
     // -- Helpers --------------------------------------------------------------
 
-    function intl(options) {
+    function intl() {
         /* jshint validthis:true */
 
+        this.tags = ['intl'];
+
+        this.parse = function(parser, nodes, lexer) {
+            // get the tag token
+            var tok = parser.nextToken();
+
+            // parse the args and move after the block end. passing true
+            // as the second arg is required if there are no parentheses
+            var args = parser.parseSignature(null, true);
+            parser.advanceAfterBlockEnd(tok.value);
+
+            // parse the body
+            var body = parser.parseUntilBlocks('endintl');
+
+            parser.advanceAfterBlockEnd();
+
+            // See above for notes about CallExtension
+            return new nodes.CallExtension(this, 'run', args, [body]);
+        };
+
+        this.run = function(context, options, body) {
+            //console.log('context', context, 'context.lookup', context.lookup);
+            //var frame = context.frame.push(),
+            //    intlData = extend({}, context.lookup('intl'), options);
+            //
+            //frame.set('data.intl', intlData);
+
+            return body();
+        };
+
+        /*
         if (!options.fn) {
             throw new Error('{{#intl}} must be invoked as a block helper');
         }
@@ -53,6 +85,7 @@ function registerWith(Nunjucks) {
         data.intl = intlData;
 
         return options.fn(this, {data: data});
+        */
     }
 
     function intlGet(path) {
