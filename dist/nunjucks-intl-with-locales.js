@@ -2378,11 +2378,9 @@
     var $$helpers$$getRelativeFormat = intl$format$cache$$default(intl$relativeformat$$default);
 
     function $$helpers$$registerWith(Nunjucks) {
-        var SafeString  = Nunjucks.SafeString,
-            createFrame = Nunjucks.createFrame;
+        var createFrame = Nunjucks.Frame;
 
         var helpers = {
-            intl             : intl,
             intlGet          : intlGet,
             formatDate       : formatDate,
             formatTime       : formatTime,
@@ -2398,11 +2396,45 @@
             }
         }
 
+        // intl custom tags are added through extension API
+        Nunjucks.addExtension('intl', new intl());
+
         // -- Helpers --------------------------------------------------------------
 
-        function intl(options) {
+        function intl() {
             /* jshint validthis:true */
 
+            this.tags = ['intl'];
+
+            this.parse = function(parser, nodes, lexer) {
+                // get the tag token
+                var tok = parser.nextToken();
+
+                // parse the args and move after the block end. passing true
+                // as the second arg is required if there are no parentheses
+                var args = parser.parseSignature(null, true);
+                parser.advanceAfterBlockEnd(tok.value);
+
+                // parse the body
+                var body = parser.parseUntilBlocks('endintl');
+
+                parser.advanceAfterBlockEnd();
+
+                // See above for notes about CallExtension
+                return new nodes.CallExtension(this, 'run', args, [body]);
+            };
+
+            this.run = function(context, options, body) {
+                //console.log('context', context, 'context.lookup', context.lookup);
+                //var frame = context.frame.push(),
+                //    intlData = extend({}, context.lookup('intl'), options);
+                //
+                //frame.set('data.intl', intlData);
+
+                return body();
+            };
+
+            /*
             if (!options.fn) {
                 throw new Error('{{#intl}} must be invoked as a block helper');
             }
@@ -2410,11 +2442,12 @@
             // Create a new data frame linked the parent and create a new intl data
             // object and extend it with `options.data.intl` and `options.hash`.
             var data     = createFrame(options.data),
-                intlData = $$utils$$extend({}, data.intl, options.hash);
+                intlData = extend({}, data.intl, options.hash);
 
             data.intl = intlData;
 
             return options.fn(this, {data: data});
+            */
         }
 
         function intlGet(path) {
@@ -2443,12 +2476,16 @@
             assertIsDate(date, 'A date or timestamp must be provided to {{formatDate}}');
 
             if (!options) {
-                options = format;
-                format  = null;
+                if (typeof format === 'object') {
+                    options = format;
+                    format  = null;
+                } else {
+                    options = {};
+                }
             }
 
             var locales       = this.lookup('intl').locales;
-            var formatOptions = getFormatOptions('date', format, options);
+            var formatOptions = getFormatOptions(this, 'date', format, options);
 
             return $$helpers$$getDateTimeFormat(locales, formatOptions).format(date);
         }
@@ -2458,12 +2495,16 @@
             assertIsDate(date, 'A date or timestamp must be provided to {{formatTime}}');
 
             if (!options) {
-                options = format;
-                format  = null;
+                if (typeof format === 'object') {
+                    options = format;
+                    format  = null;
+                } else {
+                    options = {};
+                }
             }
 
             var locales       = this.lookup('intl').locales;
-            var formatOptions = getFormatOptions('time', format, options);
+            var formatOptions = getFormatOptions(this, 'time', format, options);
 
             return $$helpers$$getDateTimeFormat(locales, formatOptions).format(date);
         }
@@ -2473,48 +2514,55 @@
             assertIsDate(date, 'A date or timestamp must be provided to {{formatRelative}}');
 
             if (!options) {
-                options = format;
-                format  = null;
+                if (typeof format === 'object') {
+                    options = format;
+                    format  = null;
+                } else {
+                    options = {};
+                }
             }
 
             var locales       = this.lookup('intl').locales;
-            var formatOptions = getFormatOptions('relative', format, options);
-            var now           = options.hash.now;
+            var formatOptions = getFormatOptions(this, 'relative', format, options);
+            var now           = options.now;
 
             // Remove `now` from the options passed to the `IntlRelativeFormat`
             // constructor, because it's only used when calling `format()`.
             delete formatOptions.now;
 
-            return $$helpers$$getRelativeFormat(locales, formatOptions).format(date, {
-                now: now
-            });
+            return $$helpers$$getRelativeFormat(locales, formatOptions).format(date, { now: now });
         }
 
         function formatNumber(num, format, options) {
             assertIsNumber(num, 'A number must be provided to {{formatNumber}}');
 
             if (!options) {
-                options = format;
-                format  = null;
+                if (typeof format === 'object') {
+                    options = format;
+                    format  = null;
+                } else {
+                    options = {};
+                }
             }
 
             var locales       = this.lookup('intl').locales;
-            var formatOptions = getFormatOptions('number', format, options);
+            var formatOptions = getFormatOptions(this, 'number', format, options);
 
             return $$helpers$$getNumberFormat(locales, formatOptions).format(num);
         }
 
         function formatMessage(message, options) {
+
             if (!options) {
-                options = message;
-                message = null;
+                if (typeof message === 'object') {
+                    options = message;
+                    message  = null;
+                } else {
+                    options = {};
+                }
             }
 
-            var hash = options.hash;
-
-            // TODO: remove support form `hash.intlName` once Nunjucks bugs with
-            // subexpressions are fixed.
-            if (!(message || typeof message === 'string' || hash.intlName)) {
+            if (!(message || typeof message === 'string' || options.intlName)) {
                 throw new ReferenceError(
                     '{{formatMessage}} must be provided a message or intlName'
                 );
@@ -2526,47 +2574,51 @@
 
             // Lookup message by path name. User must supply the full path to the
             // message on `options.data.intl`.
-            if (!message && hash.intlName) {
-                message = intlGet(hash.intlName, options);
+            if (!message && options.intlName) {
+                message = intlGet.call(this, options.intlName, options);
             }
 
             // When `message` is a function, assume it's an IntlMessageFormat
             // instance's `format()` method passed by reference, and call it. This
             // is possible because its `this` will be pre-bound to the instance.
             if (typeof message === 'function') {
-                return message(hash);
+                return message(options);
             }
 
             if (typeof message === 'string') {
                 message = $$helpers$$getMessageFormat(message, locales, formats);
             }
 
-            return message.format(hash);
+            return message.format(options);
         }
 
-        function formatHTMLMessage() {
+        function formatHTMLMessage(message, options) {
             /* jshint validthis:true */
-            var options = [].slice.call(arguments).pop(),
-                hash    = options.hash;
+
+            if (!options) {
+                if (typeof message === 'object') {
+                    options = message;
+                    message  = null;
+                } else {
+                    options = {};
+                }
+            }
 
             var key, value;
 
-            // Replace string properties in `options.hash` with HTML-escaped
-            // strings.
-            for (key in hash) {
-                if (hash.hasOwnProperty(key)) {
-                    value = hash[key];
+            // Replace string properties in `options` with HTML-escaped strings.
+            for (key in options) {
+                if (options.hasOwnProperty(key)) {
+                    value = options[key];
 
                     // Escape string value.
                     if (typeof value === 'string') {
-                        hash[key] = this.escape(value);
+                        options[key] = this.env.filters.escape(value);
                     }
                 }
             }
 
-            // Return a Nunjucks `SafeString`. This first unwraps the result to
-            // make sure it's not returning a double-wrapped `SafeString`.
-            return new SafeString(String(formatMessage.apply(this, arguments)));
+            return this.env.filters.safe(formatMessage.call(this, message, options));
         }
 
         // -- Utilities ------------------------------------------------------------
@@ -2585,18 +2637,17 @@
             }
         }
 
-        function getFormatOptions(type, format, options) {
-            var hash = options.hash;
+        function getFormatOptions(self, type, format, options) {
             var formatOptions;
 
             if (format) {
                 if (typeof format === 'string') {
-                    formatOptions = intlGet('formats.' + type + '.' + format, options);
+                    formatOptions = intlGet.call(self, 'formats.' + type + '.' + format, options);
                 }
 
-                formatOptions = $$utils$$extend({}, formatOptions, hash);
+                formatOptions = $$utils$$extend({}, formatOptions, options);
             } else {
-                formatOptions = hash;
+                formatOptions = options;
             }
 
             return formatOptions;

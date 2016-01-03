@@ -1,7 +1,7 @@
 {
   "name": "nunjucks-intl",
   "version": "0.0.1",
-  "description": "Nunjucks helpers for internationalization.",
+  "description": "Nunjucks helpers for internationalization with format.js.",
   "keywords": [
     "intl",
     "i18n",
