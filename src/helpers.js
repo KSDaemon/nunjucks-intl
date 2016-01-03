@@ -17,7 +17,7 @@ var getRelativeFormat = createFormatCache(IntlRelativeFormat);
 
 function registerWith(Nunjucks) {
     var SafeString  = Nunjucks.SafeString,
-        createFrame = Nunjucks.createFrame;
+        createFrame = Nunjucks.Frame;
 
     var helpers = {
         intl             : intl,
@@ -197,29 +197,33 @@ function registerWith(Nunjucks) {
         return message.format(options);
     }
 
-    function formatHTMLMessage() {
+    function formatHTMLMessage(message, options) {
         /* jshint validthis:true */
-        var options = [].slice.call(arguments).pop(),
-            hash    = options.hash;
+
+        if (!options) {
+            if (typeof message === 'object') {
+                options = message;
+                message  = null;
+            } else {
+                options = {};
+            }
+        }
 
         var key, value;
 
-        // Replace string properties in `options.hash` with HTML-escaped
-        // strings.
-        for (key in hash) {
-            if (hash.hasOwnProperty(key)) {
-                value = hash[key];
+        // Replace string properties in `options` with HTML-escaped strings.
+        for (key in options) {
+            if (options.hasOwnProperty(key)) {
+                value = options[key];
 
                 // Escape string value.
                 if (typeof value === 'string') {
-                    hash[key] = this.escape(value);
+                    options[key] = this.env.filters.escape(value);
                 }
             }
         }
 
-        // Return a Nunjucks `SafeString`. This first unwraps the result to
-        // make sure it's not returning a double-wrapped `SafeString`.
-        return new SafeString(String(formatMessage.apply(this, arguments)));
+        return this.env.filters.safe(formatMessage.call(this, message, options));
     }
 
     // -- Utilities ------------------------------------------------------------
@@ -241,7 +245,6 @@ function registerWith(Nunjucks) {
     function getFormatOptions(self, type, format, options) {
         var formatOptions;
 
-        console.log(type, format, options);
         if (format) {
             if (typeof format === 'string') {
                 formatOptions = intlGet.call(self, 'formats.' + type + '.' + format, options);
