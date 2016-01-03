@@ -2378,7 +2378,7 @@
     var $$helpers$$getRelativeFormat = intl$format$cache$$default(intl$relativeformat$$default);
 
     function $$helpers$$registerWith(Nunjucks) {
-        var createFrame = Nunjucks.Frame;
+        //var createFrame = Nunjucks.Frame;
 
         var helpers = {
             intlGet          : intlGet,
