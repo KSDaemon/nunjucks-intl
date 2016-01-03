@@ -16,7 +16,7 @@ var getMessageFormat  = createFormatCache(IntlMessageFormat);
 var getRelativeFormat = createFormatCache(IntlRelativeFormat);
 
 function registerWith(Nunjucks) {
-    var createFrame = Nunjucks.Frame;
+    //var createFrame = Nunjucks.Frame;
 
     var helpers = {
         intlGet          : intlGet,

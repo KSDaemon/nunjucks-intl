@@ -7,9 +7,12 @@ require('intl');
 Intl.NumberFormat   = IntlPolyfill.NumberFormat;
 Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
 
-global.Nunjucks = require('handlebars');
+var n = require('nunjucks');
+var ne = new n.Environment({ throwOnUndefined: true });
+
+global.Nunjucks = ne;
 global.expect = require('expect.js');
 
-require('../').registerWith(Nunjucks);
+require('../').registerWith(ne);
 
 require('./helpers');

@@ -5,77 +5,61 @@
 
 var timeStamp = 1390518044403;
 
-function intlBlock(content, options) {
-    var hash = [],
-        option, open, close;
-
-    for (option in options) {
-        if (options.hasOwnProperty(option)) {
-            hash.push(option + '=' + '"' + options[option] + '"');
-        }
-    }
-
-    open  = '{{#intl ' + hash.join(' ') + '}}';
-    close = '{{/intl}}';
-
-    return Nunjucks.compile(open + content + close);
-}
-
 describe('Helper `formatNumber`', function () {
     it('should be added to Nunjucks', function () {
-        expect(Nunjucks.helpers).to.have.keys('formatNumber');
+        expect(Nunjucks.globals).to.have.keys('formatNumber');
     });
 
     it('should be a function', function () {
-        expect(Nunjucks.helpers.formatNumber).to.be.a('function');
+        expect(Nunjucks.globals.formatNumber).to.be.a('function');
     });
 
     it('should throw if called with out a value', function () {
-        expect(Nunjucks.compile('{{formatNumber}}')).to.throwException(function (e) {
-            expect(e).to.be.a(TypeError);
+        expect(Nunjucks.renderString('{{ formatNumber() }}')).to.throwException(function (e) {
+            expect(e).to.be.a(Error);
         });
     });
 
     describe('used to format numbers', function () {
         it('should return a string', function () {
-            var tmpl = intlBlock('{{formatNumber 4}}', {locales: 'en-US'});
-            expect(tmpl()).to.equal('4');
+            var tmpl = Nunjucks.renderString('{{ formatNumber(4) }}', { intl: { locales: 'en-US' }});
+            expect(tmpl).to.equal('4');
         });
 
         it('should return a decimal as a string', function () {
-            var tmpl = intlBlock('{{formatNumber NUM}}', {locales: 'en-US'});
-            expect(tmpl({ NUM: 4.004 })).to.equal('4.004');
+            var tmpl = Nunjucks.renderString('{{ formatNumber(NUM)}}', { NUM: 4.004, intl: { locales: 'en-US' }});
+            expect(tmpl).to.equal('4.004');
         });
 
         it('should return a formatted string with a thousand separator', function () {
-            var tmpl = intlBlock('{{formatNumber NUM}}', {locales: 'en-US'});
-            expect(tmpl({ NUM: 40000 })).to.equal('40,000');
+            var tmpl = Nunjucks.renderString('{{ formatNumber(NUM) }}', {  NUM: 40000, intl: { locales: 'en-US' }});
+            expect(tmpl).to.equal('40,000');
         });
 
         it('should return a formatted string with a thousand separator and decimal', function () {
-            var tmpl = intlBlock('{{formatNumber NUM}}', {locales: 'en-US'});
-            expect(tmpl({ NUM: 40000.004 })).to.equal('40,000.004');
+            var tmpl = Nunjucks.renderString('{{ formatNumber(NUM) }}', { NUM: 40000.004, intl: { locales: 'en-US' }});
+            expect(tmpl).to.equal('40,000.004');
         });
 
         describe('in another locale', function () {
             it('should return a string', function () {
-                var tmpl = intlBlock('{{formatNumber 4}}', {locales: 'de-DE'});
-                expect(tmpl()).to.equal('4');
+                var tmpl = Nunjucks.renderString('{{ formatNumber(4) }}', { intl: { locales: 'de-DE' }});
+                expect(tmpl).to.equal('4');
             });
 
             it('should return a decimal as a string', function () {
-                var tmpl = intlBlock('{{formatNumber NUM}}', {locales: 'de-DE'});
-                expect(tmpl({ NUM: 4.004 })).to.equal('4,004');
+                var tmpl = Nunjucks.renderString('{{ formatNumber(NUM) }}', { NUM: 4.004, intl: { locales: 'de-DE' }});
+                expect(tmpl).to.equal('4,004');
             });
 
             it('should return a formatted string with a thousand separator', function () {
-                var tmpl = intlBlock('{{formatNumber NUM}}', {locales: 'de-DE'});
-                expect(tmpl({ NUM: 40000 })).to.equal('40.000');
+                var tmpl = Nunjucks.renderString('{{ formatNumber(NUM) }}', { NUM: 40000, intl: { locales: 'de-DE' }});
+                expect(tmpl).to.equal('40.000');
             });
 
             it('should return a formatted string with a thousand separator and decimal', function () {
-                var tmpl = intlBlock('{{formatNumber NUM}}', {locales: 'de-DE'});
-                expect(tmpl({ NUM: 40000.004 })).to.equal('40.000,004');
+                var tmpl = Nunjucks.renderString('{{ formatNumber(NUM) }}', { NUM: 40000.004, intl: { locales: 'de-DE' }});
+                expect(tmpl).to.equal('40.000,004');
             });
         });
     });
@@ -84,81 +68,78 @@ describe('Helper `formatNumber`', function () {
         it('should return a string formatted to currency', function () {
             var tmpl;
 
-            tmpl = intlBlock('{{formatNumber 40000 style="currency" currency="USD"}}', {locales: 'en-US'});
-            expect(tmpl()).to.equal('$40,000.00');
+            tmpl = Nunjucks.renderString('{{ formatNumber(40000, { style: "currency", currency: "USD" }) }}', { intl: { locales: 'en-US' }});
+            expect(tmpl).to.equal('$40,000.00');
 
-            tmpl = intlBlock('{{formatNumber 40000 style="currency" currency="EUR"}}', {locales: 'en-US'});
-            expect(tmpl()).to.equal('€40,000.00');
+            tmpl = Nunjucks.renderString('{{ formatNumber(40000, { style: "currency", currency: "EUR" }) }}', { intl: { locales: 'en-US' }});
+            expect(tmpl).to.equal('€40,000.00');
 
-            tmpl = intlBlock('{{formatNumber 40000 style="currency" currency="JPY"}}', {locales: 'en-US'});
-            expect(tmpl()).to.equal('¥40,000');
+            tmpl = Nunjucks.renderString('{{ formatNumber(40000, { style: "currency", currency: "JPY" }) }}', { intl: { locales: 'en-US' }});
+            expect(tmpl).to.equal('¥40,000');
         });
 
         it('should return a string formatted to currency with code', function () {
             var tmpl;
 
-            tmpl = intlBlock('{{formatNumber 40000 style="currency" currency="USD" currencyDisplay="code"}}', {locales: 'en-US'});
-            expect(tmpl()).to.equal('USD40,000.00');
+            tmpl = Nunjucks.renderString('{{ formatNumber(40000, { style: "currency", currency: "USD", currencyDisplay: "code" }) }}', { intl: { locales: 'en-US' }});
+            expect(tmpl).to.equal('USD40,000.00');
 
-            tmpl = intlBlock('{{formatNumber 40000 style="currency" currency="EUR" currencyDisplay="code"}}', {locales: 'en-US'});
-            expect(tmpl()).to.equal('EUR40,000.00');
+            tmpl = Nunjucks.renderString('{{ formatNumber(40000, { style: "currency", currency: "EUR", currencyDisplay: "code" }) }}', { intl: { locales: 'en-US' }});
+            expect(tmpl).to.equal('EUR40,000.00');
 
-            tmpl = intlBlock('{{formatNumber 40000 style="currency" currency="JPY" currencyDisplay="code"}}', {locales: 'en-US'});
-            expect(tmpl()).to.equal('JPY40,000');
+            tmpl = Nunjucks.renderString('{{ formatNumber(40000, { style: "currency", currency: "JPY", currencyDisplay: "code" }) }}', { intl: { locales: 'en-US' }});
+            expect(tmpl).to.equal('JPY40,000');
         });
 
-        it('should function within an `each` block helper', function () {
-            var tmpl = intlBlock('{{#each currencies}} {{formatNumber AMOUNT style="currency" currency=CURRENCY}}{{/each}}', {locales: 'en-US'}),
-                out  = tmpl({ currencies: [
+        it('should function within an `for` tag', function () {
+            var tmpl = Nunjucks.renderString('{% for item in currencies %} {{ formatNumber(item.AMOUNT, { style: "currency", currency: item.CURRENCY }) }}{% endfor %}',
+                {
+                    currencies: [
                         { AMOUNT: 3, CURRENCY: 'USD'},
                         { AMOUNT: 8, CURRENCY: 'EUR'},
                         { AMOUNT: 10, CURRENCY: 'JPY'}
-                    ]});
-
+                    ],
+                    intl: { locales: 'en-US' }});
             // note the output must contain the correct spaces to match the template
-            expect(out).to.equal(' $3.00 €8.00 ¥10');
+            expect(tmpl).to.equal(' $3.00 €8.00 ¥10');
         });
 
         it('should return a currency even when using a different locale', function (){
-            var tmpl = intlBlock('{{formatNumber 40000 style="currency" currency=CURRENCY}}', {locales: 'de-DE'}),
-                out  = tmpl({ CURRENCY: 'USD' });
+            var tmpl = Nunjucks.renderString('{{ formatNumber(40000, { style: "currency", currency: CURRENCY }) }}', { CURRENCY: 'USD', intl: { locales: 'de-DE' }});
+            expect(tmpl, 'USD->de-DE').to.equal('40.000,00 $');
 
-            expect(out, 'USD->de-DE').to.equal('40.000,00 $');
+            tmpl = Nunjucks.renderString('{{ formatNumber(40000, { style: "currency", currency: CURRENCY }) }}', { CURRENCY: 'EUR', intl: { locales: 'de-DE' }});
+            expect(tmpl, 'EUR->de-DE').to.equal('40.000,00 €');
 
-            tmpl = intlBlock('{{formatNumber 40000 style="currency" currency=CURRENCY}}', {locales: 'de-DE'});
-            out  = tmpl({ CURRENCY: 'EUR'});
-            expect(out, 'EUR->de-DE').to.equal('40.000,00 €');
-
-            tmpl = intlBlock('{{formatNumber 40000 style="currency" currency=CURRENCY}}', {locales: 'de-DE'});
-            out  = tmpl({ CURRENCY: 'JPY'});
-            expect(out, 'JPY->de-DE').to.equal('40.000 ¥');
+            tmpl = Nunjucks.renderString('{{ formatNumber(40000, { style: "currency", currency: CURRENCY }) }}', { CURRENCY: 'JPY', intl: { locales: 'de-DE' }});
+            expect(tmpl, 'JPY->de-DE').to.equal('40.000 ¥');
         });
     });
 
     describe('used to format percentages', function () {
         it('should return a string formatted to a percent', function () {
-            var tmpl = intlBlock('{{formatNumber 400 style="percent"}}', {locales: 'en-US'});
-            expect(tmpl()).to.equal('40,000%');
+            var tmpl = Nunjucks.renderString('{{ formatNumber(400, { style: "percent" }) }}', { intl: { locales: 'en-US' }});
+            expect(tmpl).to.equal('40,000%');
         });
 
         it('should return a percentage when using a different locale', function () {
-            var tmpl = intlBlock('{{formatNumber 400 style="percent"}}', {locales: 'de-DE'});
-            expect(tmpl()).to.equal('40.000 %');
+            var tmpl = Nunjucks.renderString('{{ formatNumber(400, { style: "percent" }) }}', { intl: { locales: 'de-DE' }});
+            expect(tmpl).to.equal('40.000 %');
         });
     });
 });
 
 describe('Helper `formatDate`', function () {
     it('should be added to Nunjucks', function () {
-        expect(Nunjucks.helpers).to.have.keys('formatDate');
+        expect(Nunjucks.globals).to.have.keys('formatDate');
     });
 
     it('should be a function', function () {
-        expect(Nunjucks.helpers.formatDate).to.be.a('function');
+        expect(Nunjucks.globals.formatDate).to.be.a('function');
     });
 
     it('should throw if called with out a value', function () {
-        expect(Nunjucks.compile('{{formatDate}}')).to.throwException(function (e) {
+        expect(Nunjucks.renderString('{{ formatDate() }}')).to.throwException(function (e) {
             expect(e).to.be.a(TypeError);
         });
     });
@@ -183,15 +164,15 @@ describe('Helper `formatDate`', function () {
             }
         };
 
-        var tmpl = intlBlock('{{formatDate "' + dateStr + '"}}', {locales: 'en-US'});
-        expect(tmpl()).to.equal(fixedDateStr);
+        var tmpl = Nunjucks.renderString('{{formatDate "' + dateStr + '"}}', { intl: { locales: 'en-US' }});
+        expect(tmpl).to.equal(fixedDateStr);
 
-        tmpl = intlBlock('{{formatDate "' + dateStr + '" "short"}}', {locales: 'en-US'});
+        tmpl = Nunjucks.renderString('{{formatDate "' + dateStr + '" "short"}}', { intl: { locales: 'en-US' }});
         expect(tmpl(null, {data: {intl: intlData}})).to.equal(fixedDateStr);
 
         // note timestamp is passed as a number
-        tmpl = intlBlock('{{formatDate ' + timeStamp + '}}', {locales: 'en-US'});
-        expect(tmpl()).to.equal(fixedDateStr);
+        tmpl = Nunjucks.renderString('{{formatDate ' + timeStamp + '}}', { intl: { locales: 'en-US' }});
+        expect(tmpl).to.equal(fixedDateStr);
     });
 
     it('should return a formatted string of just the time', function () {
@@ -208,30 +189,30 @@ describe('Helper `formatDate`', function () {
             }
         };
 
-        var tmpl = intlBlock('{{formatDate ' + timeStamp + ' hour="numeric" minute="numeric" timeZone="UTC"}}', {locales: 'en-US'});
-        expect(tmpl()).to.equal('11:00 PM');
+        var tmpl = Nunjucks.renderString('{{formatDate ' + timeStamp + ' hour="numeric" minute="numeric" timeZone="UTC"}}', { intl: { locales: 'en-US' }});
+        expect(tmpl).to.equal('11:00 PM');
 
-        tmpl = intlBlock('{{formatDate ' + timeStamp + ' "usual"}}', {locales: 'en-US'});
+        tmpl = Nunjucks.renderString('{{formatDate ' + timeStamp + ' "usual"}}', { intl: { locales: 'en-US' }});
         expect(tmpl(null, {data: {intl: intlData}})).to.equal('11:00 PM');
     });
 
     it('should format the epoch timestamp', function () {
-        var tmpl = intlBlock('{{formatDate 0}}', {locales: 'en-US'});
-        expect(tmpl()).to.equal(new Intl.DateTimeFormat('en').format(0));
+        var tmpl = Nunjucks.renderString('{{formatDate 0}}', { intl: { locales: 'en-US' }});
+        expect(tmpl).to.equal(new Intl.DateTimeFormat('en').format(0));
     });
 });
 
 describe('Helper `formatTime`', function () {
     it('should be added to Nunjucks', function () {
-        expect(Nunjucks.helpers).to.have.keys('formatTime');
+        expect(Nunjucks.globals).to.have.keys('formatTime');
     });
 
     it('should be a function', function () {
-        expect(Nunjucks.helpers.formatTime).to.be.a('function');
+        expect(Nunjucks.globals.formatTime).to.be.a('function');
     });
 
     it('should throw if called with out a value', function () {
-        expect(Nunjucks.compile('{{formatTime}}')).to.throwException(function (e) {
+        expect(Nunjucks.renderString('{{ formatTime() }}')).to.throwException(function (e) {
             expect(e).to.be.a(TypeError);
         });
     });
@@ -243,12 +224,12 @@ describe('Helper `formatTime`', function () {
         fixedDateStr = "" + (fixedDate.getMonth()+1) + "/" + fixedDate.getDate() + "/" + fixedDate.getFullYear();
 
     it('should return a formatted string', function () {
-        var tmpl = intlBlock('{{formatTime "' + dateStr + '"}}', {locales: 'en-US'});
-        expect(tmpl()).to.equal(fixedDateStr);
+        var tmpl = Nunjucks.renderString('{{formatTime "' + dateStr + '"}}', { intl: { locales: 'en-US' }});
+        expect(tmpl).to.equal(fixedDateStr);
 
         // note timestamp is passed as a number
-        tmpl = intlBlock('{{formatTime ' + timeStamp + '}}', {locales: 'en-US'});
-        expect(tmpl()).to.equal(fixedDateStr);
+        tmpl = Nunjucks.renderString('{{formatTime ' + timeStamp + '}}', { intl: { locales: 'en-US' }});
+        expect(tmpl).to.equal(fixedDateStr);
     });
 
     it('should return a formatted string of just the time', function () {
@@ -265,25 +246,25 @@ describe('Helper `formatTime`', function () {
             }
         };
 
-        var tmpl = intlBlock('{{formatTime ' + timeStamp + ' hour="numeric" minute="numeric" timeZone="UTC"}}', {locales: 'en-US'});
-        expect(tmpl()).to.equal('11:00 PM');
+        var tmpl = Nunjucks.renderString('{{formatTime ' + timeStamp + ' hour="numeric" minute="numeric" timeZone="UTC"}}', { intl: { locales: 'en-US' }});
+        expect(tmpl).to.equal('11:00 PM');
 
-        tmpl = intlBlock('{{formatTime ' + timeStamp + ' "usual"}}', {locales: 'en-US'});
+        tmpl = Nunjucks.renderString('{{formatTime ' + timeStamp + ' "usual"}}', { intl: { locales: 'en-US' }});
         expect(tmpl(null, {data: {intl: intlData}})).to.equal('11:00 PM');
     });
 });
 
 describe('Helper `formatRelative`', function () {
     it('should be added to Nunjucks', function () {
-        expect(Nunjucks.helpers).to.have.keys('formatRelative');
+        expect(Nunjucks.globals).to.have.keys('formatRelative');
     });
 
     it('should be a function', function () {
-        expect(Nunjucks.helpers.formatRelative).to.be.a('function');
+        expect(Nunjucks.globals.formatRelative).to.be.a('function');
     });
 
     it('should throw if called with out a value', function () {
-        expect(Nunjucks.compile('{{formatRelative}}')).to.throwException(function (e) {
+        expect(Nunjucks.renderString('{{ formatRelative() }}')).to.throwException(function (e) {
             expect(e).to.be.a(TypeError);
         });
     });
@@ -291,43 +272,43 @@ describe('Helper `formatRelative`', function () {
     var tomorrow = new Date().getTime() + (24 * 60 * 60 * 1000);
 
     it('should return a formatted string', function () {
-        var tmpl = intlBlock('{{formatRelative date}}', {locales: 'en-US'});
+        var tmpl = Nunjucks.renderString('{{formatRelative date}}', { intl: { locales: 'en-US' }});
         expect(tmpl({date: tomorrow})).to.equal('tomorrow');
     });
 
     it('should accept formatting options', function () {
-        var tmpl = intlBlock('{{formatRelative date style="numeric"}}', {locales: 'en-US'});
+        var tmpl = Nunjucks.renderString('{{formatRelative date style="numeric"}}', { intl: { locales: 'en-US' }});
         expect(tmpl({date: tomorrow})).to.equal('in 1 day');
     });
 
     it('should accept a `now` option', function () {
-        var tmpl = intlBlock('{{formatRelative 2000 now=1000}}', {locales: 'en-US'});
-        expect(tmpl()).to.equal('in 1 second');
+        var tmpl = Nunjucks.renderString('{{formatRelative 2000 now=1000}}', { intl: { locales: 'en-US' }});
+        expect(tmpl).to.equal('in 1 second');
     });
 
     it('should format the epoch timestamp', function () {
-        var tmpl = intlBlock('{{formatRelative 0 now=1000}}', {locales: 'en-US'});
-        expect(tmpl()).to.equal('1 second ago');
+        var tmpl = Nunjucks.renderString('{{formatRelative 0 now=1000}}', { intl: { locales: 'en-US' }});
+        expect(tmpl).to.equal('1 second ago');
     });
 });
 
 describe('Helper `formatMessage`', function () {
     it('should be added to Nunjucks', function () {
-        expect(Nunjucks.helpers).to.have.keys('formatMessage');
+        expect(Nunjucks.globals).to.have.keys('formatMessage');
     });
 
     it('should be a function', function () {
-        expect(Nunjucks.helpers.formatMessage).to.be.a('function');
+        expect(Nunjucks.globals.formatMessage).to.be.a('function');
     });
 
     it('should throw if called with out a value', function () {
-        expect(Nunjucks.compile('{{formatMessage}}')).to.throwException(function (e) {
+        expect(Nunjucks.renderString('{{ formatMessage() }}')).to.throwException(function (e) {
             expect(e).to.be.a(ReferenceError);
         });
     });
 
     it('should return a formatted string', function () {
-        var tmpl = intlBlock('{{formatMessage MSG firstName=firstName lastName=lastName}}', {locales: 'en-US'}),
+        var tmpl = Nunjucks.renderString('{{formatMessage MSG firstName=firstName lastName=lastName}}', { intl: { locales: 'en-US' }}),
             out  = tmpl({
                 MSG      : 'Hi, my name is {firstName} {lastName}.',
                 firstName: 'Anthony',
@@ -338,7 +319,7 @@ describe('Helper `formatMessage`', function () {
     });
 
     it('should return a formatted string with formatted numbers and dates', function () {
-        var tmpl = intlBlock('{{formatMessage POP_MSG city=city population=population census_date=census_date timeZone=timeZone}}', {locales: 'en-US'}),
+        var tmpl = Nunjucks.renderString('{{formatMessage POP_MSG city=city population=population census_date=census_date timeZone=timeZone}}', { intl: { locales: 'en-US' }}),
             out  = tmpl({
                 POP_MSG    : '{city} has a population of {population, number, integer} as of {census_date, date, long}.',
                 city       : 'Atlanta',
@@ -351,7 +332,7 @@ describe('Helper `formatMessage`', function () {
     });
 
     it('should return a formatted string with formatted numbers and dates in a different locale', function () {
-        var tmpl = intlBlock('{{formatMessage POP_MSG city=city population=population census_date=census_date timeZone=timeZone}}', {locales: 'de-DE'}),
+        var tmpl = Nunjucks.renderString('{{formatMessage POP_MSG city=city population=population census_date=census_date timeZone=timeZone}}', { intl: { locales: 'de-DE' }}),
             out  = tmpl({
                 POP_MSG    : '{city} hat eine Bevölkerung von {population, number, integer} zum {census_date, date, long}.',
                 city       : 'Atlanta',
@@ -364,7 +345,7 @@ describe('Helper `formatMessage`', function () {
     });
 
     it('should return a formatted string with an `each` block', function () {
-        var tmpl = intlBlock('{{#each harvest}} {{formatMessage ../HARVEST_MSG person=person count=count }}{{/each}}', {locales: 'en-US'}),
+        var tmpl = Nunjucks.renderString('{{#each harvest}} {{formatMessage ../HARVEST_MSG person=person count=count }}{{/each}}', { intl: { locales: 'en-US' }}),
             out  = tmpl({
                 HARVEST_MSG: '{person} harvested {count, plural, one {# apple} other {# apples}}.',
                 harvest    : [
@@ -377,7 +358,7 @@ describe('Helper `formatMessage`', function () {
     });
 
     it('should return a formatted `selectedordinal` message', function () {
-        var tmpl = intlBlock('{{formatMessage BDAY_MSG year=year}}', {locales: 'en-US'});
+        var tmpl = Nunjucks.renderString('{{formatMessage BDAY_MSG year=year}}', { intl: { locales: 'en-US' }});
         var out  = tmpl({
             BDAY_MSG: 'This is my {year, selectordinal, one{#st} two{#nd} few{#rd} other{#th}} birthday.',
             year    : 3
@@ -389,11 +370,11 @@ describe('Helper `formatMessage`', function () {
 
 describe('Helper `intl`', function () {
     it('should be added to Nunjucks', function () {
-        expect(Nunjucks.helpers).to.have.keys('intl');
+        expect(Nunjucks.globals).to.have.keys('intl');
     });
 
     it('should be a function', function () {
-        expect(Nunjucks.helpers.intl).to.be.a('function');
+        expect(Nunjucks.globals.intl).to.be.a('function');
     });
 
     describe('should provide formats', function () {
@@ -410,7 +391,7 @@ describe('Helper `intl`', function () {
                     },
                     NUM: 40000.004
                 };
-            expect(Nunjucks.compile(tmpl)(ctx)).to.equal('$40,000.00 €40,000.00 $40,000.00');
+            expect(Nunjucks.renderString(tmpl)(ctx)).to.equal('$40,000.00 €40,000.00 $40,000.00');
         });
 
         it('for formatDate', function () {
@@ -425,7 +406,7 @@ describe('Helper `intl`', function () {
                     }
                 },
                 d = new Date(timeStamp);
-            expect(Nunjucks.compile(tmpl)(ctx)).to.equal("11:00 PM");
+            expect(Nunjucks.renderString(tmpl)(ctx)).to.equal("11:00 PM");
         });
 
         it('for formatMessage', function () {
@@ -448,7 +429,7 @@ describe('Helper `intl`', function () {
                 fixedDate = new Date(timeStamp),
                 fixedDateStr = "" + fixedDate.getDate() + ", " + fixedDate.getFullYear();
 
-            expect(Nunjucks.compile(tmpl)(ctx)).to.equal("oranges cost $40,000.00 (or €40,000.00) if ordered by January " + fixedDateStr);
+            expect(Nunjucks.renderString(tmpl)(ctx)).to.equal("oranges cost $40,000.00 (or €40,000.00) if ordered by January " + fixedDateStr);
         });
     });
 });

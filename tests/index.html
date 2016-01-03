@@ -1,59 +1,60 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>NunjucksIntl Browser Tests</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
-  </head>
-  <body>
+    <link rel="stylesheet" href="../node_modules/mocha/mocha.css"/>
+</head>
+<body>
     <div id="mocha"></div>
     <script src="../node_modules/intl/Intl.complete.js"></script>
     <script>
-      // Force use of Intl.js Polyfill to serve as a mock.
-      Intl.NumberFormat   = IntlPolyfill.NumberFormat;
-      Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
+        // Force use of Intl.js Polyfill to serve as a mock.
+        Intl.NumberFormat = IntlPolyfill.NumberFormat;
+        Intl.DateTimeFormat = IntlPolyfill.DateTimeFormat;
     </script>
     <script src="../node_modules/mocha/mocha.js"></script>
     <script src="../node_modules/expect.js/index.js"></script>
-    <script src="../node_modules/handlebars/dist/handlebars.js"></script>
-    <script src="../dist/handlebars-intl-with-locales.js"></script>
+    <script src="../node_modules/nunjucks/browser/nunjucks.js"></script>
+    <script src="../dist/nunjucks-intl-with-locales.js"></script>
     <script>
-      NunjucksIntl.registerWith(Nunjucks);
-      mocha.setup('bdd');
+        var Nunjucks = new nunjucks.Environment({ throwOnUndefined: true });
+        NunjucksIntl.registerWith(Nunjucks);
+        mocha.setup('bdd');
     </script>
     <script src="helpers.js"></script>
     <script>
-    (function () {
-      var runner = mocha.run();
+        (function () {
+            var runner = mocha.run();
 
-      var failedTests = [];
-      runner.on('end', function () {
-        window.mochaResults = runner.stats;
-        window.mochaResults.reports = failedTests;
-      });
+            var failedTests = [];
+            runner.on('end', function () {
+                window.mochaResults = runner.stats;
+                window.mochaResults.reports = failedTests;
+            });
 
-      function flattenTitles(test) {
-        var titles = [];
-        while (test.parent.title){
-          titles.push(test.parent.title);
-          test = test.parent;
-        }
-        return titles.reverse();
-      }
+            function flattenTitles(test) {
+                var titles = [];
+                while (test.parent.title) {
+                    titles.push(test.parent.title);
+                    test = test.parent;
+                }
+                return titles.reverse();
+            }
 
-      runner.on('fail', function (test, err) {
+            runner.on('fail', function (test, err) {
 
-        failedTests.push({
-          name: test.title,
-          result: false,
-          message: err && err.message,
-          stack: err && err.stack,
-          titles: flattenTitles(test)
-        });
+                failedTests.push({
+                    name   : test.title,
+                    result : false,
+                    message: err && err.message,
+                    stack  : err && err.stack,
+                    titles : flattenTitles(test)
+                });
 
-      });
-    }());
+            });
+        }());
     </script>
-  </body>
+</body>
 </html>
