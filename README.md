@@ -93,8 +93,6 @@ See the [LICENSE file][LICENSE] for license text and copyright information.
 [travis-badge]: http://img.shields.io/travis/KSDaemon/nunjucks-intl.svg?style=flat-square
 [david]: https://david-dm.org/KSDaemon/nunjucks-intl
 [david-badge]: https://img.shields.io/david/KSDaemon/nunjucks-intl.svg?style=flat-square
-[sauce]: https://saucelabs.com/u/nunjucks-intl
-[sauce-badge]: https://saucelabs.com/browser-matrix/nunjucks-intl.svg
 [FormatJS]: http://formatjs.io/
 [FormatJS GitHub]: http://formatjs.io/github/
 [ICU Message syntax]: http://formatjs.io/guide/#messageformat-syntax
