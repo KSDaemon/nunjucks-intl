@@ -1,6 +1,6 @@
 {
   "name": "nunjucks-intl",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Nunjucks helpers for internationalization with format.js.",
   "keywords": [
     "intl",
@@ -28,9 +28,9 @@
     "./lib/locales.js": false
   },
   "dependencies": {
-    "intl-format-cache": "2.0.4",
-    "intl-messageformat": "1.1.0",
-    "intl-relativeformat": "1.1.0"
+    "intl-format-cache": "^2.0.4",
+    "intl-messageformat": "^1.2.0",
+    "intl-relativeformat": "^1.2.0"
   },
   "devDependencies": {
     "benchmark": "^1.0.0",
@@ -39,18 +39,18 @@
     "grunt-benchmark": "^0.3.0",
     "grunt-bundle-jsnext-lib": "^0.5.0",
     "grunt-cli": "^0.1.13",
-    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-clean": "^0.7.0",
     "grunt-contrib-concat": "^0.5.0",
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-jshint": "^0.11.0",
-    "grunt-contrib-uglify": "^0.8.0",
+    "grunt-contrib-uglify": "^0.11.0",
     "grunt-extract-cldr-data": "2.1.1",
     "grunt-json-remove-fields": "git://github.com/ericf/grunt-json-remove-fields#improve-files-and-output",
-    "intl": "^0.1.4",
-    "istanbul": "^0.3.2",
+    "intl": "^1.0.1",
+    "istanbul": "^0.4.1",
     "mocha": "^2.0.1",
-    "nunjucks": "^2.2.0",
-    "xunit-file": "0.0.6"
+    "nunjucks": "^2.0.0",
+    "xunit-file": "0.0.9"
   },
   "scripts": {
     "prepublish": "grunt",
