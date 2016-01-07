@@ -14,11 +14,13 @@ describe('Helper `formatNumber`', function () {
         expect(Nunjucks.globals.formatNumber).to.be.a('function');
     });
 
-    it('should throw if called with out a value'/*, function () {
-        expect(Nunjucks.renderString('{{ formatNumber() }}')).to.throwException(function (e) {
+    it('should throw if called with out a value', function () {
+        try {
+            Nunjucks.renderString('{{ formatNumber() }}');
+        } catch (e) {
             expect(e).to.be.a(Error);
-        });
-    }*/);
+        }
+    });
 
     describe('used to format numbers', function () {
         it('should return a string', function () {
@@ -138,11 +140,13 @@ describe('Helper `formatDate`', function () {
         expect(Nunjucks.globals.formatDate).to.be.a('function');
     });
 
-    it('should throw if called with out a value'/*, function () {
-        expect(Nunjucks.renderString('{{ formatDate() }}')).to.throwException(function (e) {
-            expect(e).to.be.a(TypeError);
-        });
-    }*/);
+    it('should throw if called with out a value', function () {
+        try {
+            Nunjucks.renderString('{{ formatDate() }}');
+        } catch (e) {
+            expect(e).to.be.a(Error);
+        }
+    });
 
     // Use a fixed known date
     var dateStr   = 'Thu Jan 23 2014 18:00:44 GMT-0500 (EST)',
@@ -211,11 +215,13 @@ describe('Helper `formatTime`', function () {
         expect(Nunjucks.globals.formatTime).to.be.a('function');
     });
 
-    it('should throw if called with out a value'/*, function () {
-        expect(Nunjucks.renderString('{{ formatTime() }}')).to.throwException(function (e) {
-            expect(e).to.be.a(TypeError);
-        });
-    }*/);
+    it('should throw if called with out a value', function () {
+        try {
+            Nunjucks.renderString('{{ formatTime() }}');
+        } catch (e) {
+            expect(e).to.be.a(Error);
+        }
+    });
 
     // Use a fixed known date
     var dateStr   = 'Thu Jan 23 2014 18:00:44 GMT-0500 (EST)',
@@ -263,11 +269,13 @@ describe('Helper `formatRelative`', function () {
         expect(Nunjucks.globals.formatRelative).to.be.a('function');
     });
 
-    it('should throw if called with out a value'/*, function () {
-        expect(Nunjucks.renderString('{{ formatRelative() }}')).to.throwException(function (e) {
-            expect(e).to.be.a(TypeError);
-        });
-    }*/);
+    it('should throw if called with out a value', function () {
+        try {
+            Nunjucks.renderString('{{ formatRelative() }}');
+        } catch (e) {
+            expect(e).to.be.a(Error);
+        }
+    });
 
     var tomorrow = new Date().getTime() + (24 * 60 * 60 * 1000);
 
@@ -301,11 +309,13 @@ describe('Helper `formatMessage`', function () {
         expect(Nunjucks.globals.formatMessage).to.be.a('function');
     });
 
-    it('should throw if called with out a value'/*, function () {
-        expect(Nunjucks.renderString('{{ formatMessage() }}')).to.throwException(function (e) {
-            expect(e).to.be.a(ReferenceError);
-        });
-    }*/);
+    it('should throw if called with out a value', function () {
+        try {
+            Nunjucks.renderString('{{ formatMessage() }}');
+        } catch (e) {
+            expect(e).to.be.a(Error);
+        }
+    });
 
     it('should return a formatted string', function () {
         var tmpl = Nunjucks.renderString('{{ formatMessage(MSG, { firstName: firstName, lastName: lastName }) }}',
@@ -387,11 +397,13 @@ describe('Helper `formatHTMLMessage`', function () {
         expect(Nunjucks.globals.formatMessage).to.be.a('function');
     });
 
-    it('should throw if called with out a value'/*, function () {
-        expect(Nunjucks.renderString('{{ formatMessage() }}')).to.throwException(function (e) {
-            expect(e).to.be.a(ReferenceError);
-        });
-    }*/);
+    it('should throw if called with out a value', function () {
+        try {
+            Nunjucks.renderString('{{ formatHTMLMessage() }}');
+        } catch (e) {
+            expect(e).to.be.a(Error);
+        }
+    });
 
     it('should return a string, that contains HTML entities', function () {
         var tmpl = Nunjucks.renderString('{{ formatHTMLMessage(intlGet("MSG"), { firstName: firstName, lastName: lastName }) }}',
