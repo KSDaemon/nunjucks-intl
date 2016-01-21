@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Nunjucks-intl by KSDaemon</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Nunjucks-intl</h1>
+      <h2 class="project-tagline">Nunjucks helpers for internationalization.</h2>
+      <a href="https://github.com/KSDaemon/nunjucks-intl" class="btn">View on GitHub</a>
+      <a href="https://github.com/KSDaemon/nunjucks-intl/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/KSDaemon/nunjucks-intl/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="nunjucks-intl" class="anchor" href="#nunjucks-intl" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Nunjucks Intl</h1>
+
+<p>This library provides <a href="http://mozilla.github.io/nunjucks">Nunjucks</a> helpers for internationalization. The helpers provide a declarative way
+to format dates, numbers, and string messages with pluralization support.</p>
+
+<p><a href="https://www.npmjs.org/package/nunjucks-intl"><img src="https://img.shields.io/npm/v/nunjucks-intl.svg?style=flat-square" alt="npm Version"></a>
+<a href="https://travis-ci.org/KSDaemon/nunjucks-intl"><img src="http://img.shields.io/travis/KSDaemon/nunjucks-intl.svg?style=flat-square" alt="Build Status"></a>
+<a href="https://david-dm.org/KSDaemon/nunjucks-intl"><img src="https://img.shields.io/david/KSDaemon/nunjucks-intl.svg?style=flat-square" alt="Dependency Status"></a></p>
+
+<h2>
+<a id="overview" class="anchor" href="#overview" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Overview</h2>
+
+<p>Nunjucks Intl uses <a href="http://formatjs.io/">FormatJS</a> components under the hood, the docs can be found on the webiste:
+<a href="http://formatjs.io/">http://formatjs.io/</a></p>
+
+<h3>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h3>
+
+<ul>
+<li>Display numbers with separators.</li>
+<li>Display dates and times correctly.</li>
+<li>Display dates relative to "now".</li>
+<li>Pluralize labels in strings.</li>
+<li>Support for 200+ languages.</li>
+<li>Runs in the browser and Node.js.</li>
+<li>Built on standards.</li>
+</ul>
+
+<h3>
+<a id="quick-example" class="anchor" href="#quick-example" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quick example</h3>
+
+<pre lang="nunjucks"><code>{{ formatMessage(
+    intlGet("messages.post.meta"),
+    {
+        num: post.comments.length,
+        ago: formatRelative(post.date)
+    })
+}}
+</code></pre>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> data <span class="pl-k">=</span> {
+    post<span class="pl-k">:</span> {
+        date    <span class="pl-k">:</span> <span class="pl-c1">1422046290531</span>,
+        comments<span class="pl-k">:</span> [<span class="pl-c">/*...*/</span>]
+    }
+};
+
+<span class="pl-k">var</span> intlData <span class="pl-k">=</span> {
+    locales <span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span>],
+    messages<span class="pl-k">:</span> {
+        post<span class="pl-k">:</span> {
+            meta<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Posted {ago}, {num, plural, one{# comment} other{# comments}}<span class="pl-pds">'</span></span>
+        }
+    }
+};
+
+<span class="pl-smi">data</span>.<span class="pl-smi">intl</span> <span class="pl-k">=</span> intlData;
+
+<span class="pl-k">var</span> html <span class="pl-k">=</span> <span class="pl-smi">nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-c">/* Template source above */</span>, data);</pre></div>
+
+<p>This example would render: <strong>"Posted 3 days ago, 1,000 comments"</strong> to the <code>html</code> variable.
+The <code>post.meta</code> message is written in the industry standard <a href="http://formatjs.io/guide/#messageformat-syntax">ICU Message syntax</a>, which you can
+also learn about on the <a href="http://formatjs.io/">FormatJS website</a>.</p>
+
+<p>In all examples below, for simplicity, nunjucks.renderString is used, but, of course,
+template render() works the same way.</p>
+
+<h3>
+<a id="api-methods" class="anchor" href="#api-methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>API Methods</h3>
+
+<h4>
+<a id="registering-nunjucks-intl-with-nunjucks-instance" class="anchor" href="#registering-nunjucks-intl-with-nunjucks-instance" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Registering Nunjucks Intl with Nunjucks instance</h4>
+
+<p>To start using intl helpers in your template, first of all, you need to register helpers with your instance of
+Nunjucks enviroment.</p>
+
+<p>This is done by:</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> nunjucks <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>nunjucks<span class="pl-pds">'</span></span>);
+<span class="pl-k">var</span> env <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">nunjucks.Environment</span>();
+
+<span class="pl-k">var</span> nunjucksIntl <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>nunjucks-intl<span class="pl-pds">'</span></span>);
+
+<span class="pl-smi">nunjucksIntl</span>.<span class="pl-en">registerWith</span>(env);
+</pre></div>
+
+<p>This adds a few global functions to nunjucks enviroment, so you can use them in your templates. Nunjucks Intl
+helpers expect to find <code>intl</code> hash-map in template context data. More info below.</p>
+
+<h4>
+<a id="intlget-helper" class="anchor" href="#intlget-helper" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>intlGet helper</h4>
+
+<p>This helper implements a lookup process by path to access data from the intl object passed into the Nunjucks data
+context when rendering the template. Usually this helper is used in a subexpressions to lookup
+translated string messages;</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatMessage(intlGet("MSG"), { firstName: firstName, lastName: lastName }) }}<span class="pl-pds">'</span></span>,
+    {
+        firstName<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Vasiliy<span class="pl-pds">'</span></span>,
+        lastName <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Pupkin<span class="pl-pds">'</span></span>,
+        intl<span class="pl-k">:</span> {
+            MSG <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Hi, my name is {firstName} {lastName}.<span class="pl-pds">'</span></span>,
+            locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span>
+        }
+    })
+<span class="pl-c">// output: Hi, my name is Vasiliy Pupkin.</span></pre></div>
+
+<h4>
+<a id="formatnumber-helper" class="anchor" href="#formatnumber-helper" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>formatNumber helper</h4>
+
+<p>This helper is used to format numbers, including currencies and percentages.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatNumber(NUM)}}<span class="pl-pds">'</span></span>, { NUM<span class="pl-k">:</span> <span class="pl-c1">4.004</span>, intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }})
+<span class="pl-c">// output: 4.004</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatNumber(NUM) }}<span class="pl-pds">'</span></span>, { NUM<span class="pl-k">:</span> <span class="pl-c1">4.004</span>, intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>de-DE<span class="pl-pds">'</span></span> }})
+<span class="pl-c">// output: 4,004</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatNumber(NUM) }}<span class="pl-pds">'</span></span>, {  NUM<span class="pl-k">:</span> <span class="pl-c1">40000</span>, intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }})
+<span class="pl-c">// output: 40,000</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatNumber(NUM) }}<span class="pl-pds">'</span></span>, { NUM<span class="pl-k">:</span> <span class="pl-c1">40000</span>, intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>de-DE<span class="pl-pds">'</span></span> }})
+<span class="pl-c">// output: 40.000</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatNumber(NUM) }}<span class="pl-pds">'</span></span>, { NUM<span class="pl-k">:</span> <span class="pl-c1">40000.004</span>, intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }})
+<span class="pl-c">// output: 40,000.004</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatNumber(NUM) }}<span class="pl-pds">'</span></span>, { NUM<span class="pl-k">:</span> <span class="pl-c1">40000.004</span>, intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>de-DE<span class="pl-pds">'</span></span> }})
+<span class="pl-c">// output: 40.000,004</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatNumber(40000, { style: "currency", currency: "USD" }) }}<span class="pl-pds">'</span></span>, { intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }})
+<span class="pl-c">// output: $40,000.00</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatNumber(40000, { style: "currency", currency: "EUR", currencyDisplay: "code" }) }}<span class="pl-pds">'</span></span>, { intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }})
+<span class="pl-c">// output: EUR40,000.00</span>
+
+<span class="pl-c">// also it's possible to return a currency even when using a different locale</span>
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatNumber(40000, { style: "currency", currency: CURRENCY }) }}<span class="pl-pds">'</span></span>, { CURRENCY<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>JPY<span class="pl-pds">'</span></span>, intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>de-DE<span class="pl-pds">'</span></span> }})
+<span class="pl-c">// output: 40.000 ¥</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatNumber(0.45, { style: "percent" }) }}<span class="pl-pds">'</span></span>, { intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }})
+<span class="pl-c">// output: 45%</span>
+</pre></div>
+
+<h4>
+<a id="formatdateformattime-helpers" class="anchor" href="#formatdateformattime-helpers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>formatDate/formatTime helpers</h4>
+
+<p>This helpers are used to format dates, including time. You can pass a date string or timestamp.
+formatDate and formatTime works the same way, and the only difference is the place for searching custom formats.
+formatDate search them in formats.date, and formatTime - in formats.time respectively.
+In example below, custom format is used, read more on <a href="http://formatjs.io/">FormatJS</a> site.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> dateStr   <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>Thu Jan 23 2014 18:00:44 GMT-0500 (EST)<span class="pl-pds">'</span></span>;
+<span class="pl-k">var</span> timeStamp <span class="pl-k">=</span> <span class="pl-c1">1390518044403</span>; <span class="pl-c">//same as dateStr</span>
+<span class="pl-k">var</span> intlData <span class="pl-k">=</span> {
+    locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span>,
+    formats<span class="pl-k">:</span> {
+        date<span class="pl-k">:</span> {
+            short<span class="pl-k">:</span> {
+                day<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>numeric<span class="pl-pds">"</span></span>,
+                month<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>numeric<span class="pl-pds">"</span></span>,
+                year<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>numeric<span class="pl-pds">"</span></span>
+            }
+        },
+        usual<span class="pl-k">:</span> {
+            hour<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>numeric<span class="pl-pds">"</span></span>,
+            minute<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>numeric<span class="pl-pds">"</span></span>,
+            timeZone<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>UTC<span class="pl-pds">"</span></span>
+        }
+    }
+};
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatDate("<span class="pl-pds">'</span></span> <span class="pl-k">+</span> dateStr <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span>") }}<span class="pl-pds">'</span></span>, { intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }});
+<span class="pl-c">// output: 1/24/2014</span>
+
+<span class="pl-c">//The same output using custom format</span>
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatDate("<span class="pl-pds">'</span></span> <span class="pl-k">+</span> dateStr <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span>", "short") }}<span class="pl-pds">'</span></span>, { intl<span class="pl-k">:</span> intlData });
+<span class="pl-c">// output: 1/24/2014</span>
+
+<span class="pl-c">//timestamp is passed as a number</span>
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatDate(<span class="pl-pds">'</span></span> <span class="pl-k">+</span> timeStamp <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span>) }}<span class="pl-pds">'</span></span>, { intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }});
+<span class="pl-c">// output: 1/24/2014</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatDate(<span class="pl-pds">'</span></span> <span class="pl-k">+</span> timeStamp <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span>, "usual") }}<span class="pl-pds">'</span></span>, { intl<span class="pl-k">:</span> intlData });
+<span class="pl-c">// output: 11:00 PM</span>
+</pre></div>
+
+<h4>
+<a id="formatrelative-helper" class="anchor" href="#formatrelative-helper" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>formatRelative helper</h4>
+
+<p>This helper is used to format relative date and time.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> tomorrow <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Date</span>().<span class="pl-c1">getTime</span>() <span class="pl-k">+</span> (<span class="pl-c1">24</span> <span class="pl-k">*</span> <span class="pl-c1">60</span> <span class="pl-k">*</span> <span class="pl-c1">60</span> <span class="pl-k">*</span> <span class="pl-c1">1000</span>);
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatRelative(date) }}<span class="pl-pds">'</span></span>, { date<span class="pl-k">:</span> tomorrow, intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }});
+<span class="pl-c">// output: tomorrow</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatRelative(date, { style: "numeric" }) }}<span class="pl-pds">'</span></span>, { date<span class="pl-k">:</span> tomorrow, intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }})
+<span class="pl-c">// output: in 1 day</span>
+
+<span class="pl-c">// also it's possible to set NOW</span>
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatRelative(2000, { now: 1000 }) }}<span class="pl-pds">'</span></span>, { intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }});
+<span class="pl-c">// output: in 1 second</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatRelative(0, { now: 1000 }) }}<span class="pl-pds">'</span></span>, { intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }});
+<span class="pl-c">// output: 1 second ago</span></pre></div>
+
+<h4>
+<a id="formatmessageformathtmlmessage-helpers" class="anchor" href="#formatmessageformathtmlmessage-helpers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>formatMessage/formatHTMLMessage helpers</h4>
+
+<p>This helpers are used to format internationalization messages, including dates, numbers, and pluralization cases.
+Using formatHTMLMessage, you can pass messages with html entities, and they will not be escaped.
+User data is always escaped.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatMessage({ firstName: firstName, lastName: lastName, intlName: "MSG" }) }}<span class="pl-pds">'</span></span>,
+    {
+        firstName<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Vasiliy<span class="pl-pds">'</span></span>,
+        lastName <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Pupkin<span class="pl-pds">'</span></span>,
+        intl<span class="pl-k">:</span> {
+            MSG      <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Hi, my name is {firstName} {lastName}.<span class="pl-pds">'</span></span>,
+            locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span>
+        }
+    });
+<span class="pl-c">// output: Hi, my name is Vasiliy Pupkin.</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatMessage(POP_MSG, { city: city, population: population, census_date: census_date, timeZone: timeZone }) }}<span class="pl-pds">'</span></span>,
+    {
+        POP_MSG    <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>{city} has a population of {population, number, integer} as of {census_date, date, long}.<span class="pl-pds">'</span></span>,
+        city       <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Atlanta<span class="pl-pds">'</span></span>,
+        population <span class="pl-k">:</span> <span class="pl-c1">5475213</span>,
+        census_date<span class="pl-k">:</span> (<span class="pl-k">new</span> <span class="pl-en">Date</span>(<span class="pl-s"><span class="pl-pds">'</span>1/1/2010<span class="pl-pds">'</span></span>)).<span class="pl-c1">getTime</span>(),
+        timeZone   <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>UTC<span class="pl-pds">'</span></span>,
+        intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }
+    });
+<span class="pl-c">// output: Atlanta has a population of 5,475,213 as of January 1, 2010.</span>
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatMessage(BDAY_MSG, { year: year }) }}<span class="pl-pds">'</span></span>,
+    {
+        BDAY_MSG<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>This is my {year, selectordinal, one{#st} two{#nd} few{#rd} other{#th}} birthday.<span class="pl-pds">'</span></span>,
+        year    <span class="pl-k">:</span> <span class="pl-c1">3</span>,
+        intl<span class="pl-k">:</span> { locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span> }
+    });
+<span class="pl-c">// output: This is my 3rd birthday.</span>
+
+
+<span class="pl-smi">Nunjucks</span>.<span class="pl-en">renderString</span>(<span class="pl-s"><span class="pl-pds">'</span>{{ formatHTMLMessage(intlGet("MSG"), { firstName: firstName, lastName: lastName }) }}<span class="pl-pds">'</span></span>,
+    {
+        firstName<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>&lt;Vasiliy&gt;<span class="pl-pds">'</span></span>,
+        lastName <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>&lt;Pupkin&gt;<span class="pl-pds">'</span></span>,
+        intl<span class="pl-k">:</span> {
+            MSG <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Hi, my &lt;name&gt; is {firstName} {lastName}.<span class="pl-pds">'</span></span>,
+            locales<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>en-US<span class="pl-pds">'</span></span>
+        }
+    });
+<span class="pl-c">// output: Hi, my &lt;name&gt; is &amp;lt;Vasiliy&amp;gt; &amp;lt;Pupkin&amp;gt;.</span></pre></div>
+
+<p>Also, you can lookup into <a href="tests/helpers.js">tests</a> for more usage examples.</p>
+
+<h2>
+<a id="contribute" class="anchor" href="#contribute" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contribute</h2>
+
+<p>Let's make Nunjucks Intl and FormatJS better! If you're interested in helping, all contributions
+are welcome and appreciated. Nunjucks Intl is just one of many packages that make up the
+<a href="http://formatjs.io/github/">FormatJS suite of packages</a>, and you can contribute to any/all of them,
+including the <a href="http://formatjs.io/">Format JS website</a> itself.</p>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<p>This software is free to use under the BSD license.
+See the <a href="https://github.com/KSDaemon/nunjucks-intl/blob/master/LICENSE">LICENSE file</a> for license text and copyright information.</p>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/KSDaemon/nunjucks-intl">Nunjucks-intl</a> is maintained by <a href="https://github.com/KSDaemon">KSDaemon</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
