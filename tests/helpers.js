@@ -321,22 +321,22 @@ describe('Helper `formatMessage`', function () {
         var tmpl = Nunjucks.renderString('{{ formatMessage(MSG, { firstName: firstName, lastName: lastName }) }}',
             {
                 MSG      : 'Hi, my name is {firstName} {lastName}.',
-                firstName: 'Anthony',
-                lastName : 'Pipkin',
+                firstName: 'Vasiliy',
+                lastName : 'Pupkin',
                 intl: { locales: 'en-US' }
             });
-        expect(tmpl).to.equal('Hi, my name is Anthony Pipkin.');
+        expect(tmpl).to.equal('Hi, my name is Vasiliy Pupkin.');
 
         tmpl = Nunjucks.renderString('{{ formatMessage({ firstName: firstName, lastName: lastName, intlName: "MSG" }) }}',
             {
-                firstName: 'Anthony',
-                lastName : 'Pipkin',
+                firstName: 'Vasiliy',
+                lastName : 'Pupkin',
                 intl: {
                     MSG      : 'Hi, my name is {firstName} {lastName}.',
                     locales: 'en-US'
                 }
             });
-        expect(tmpl).to.equal('Hi, my name is Anthony Pipkin.');
+        expect(tmpl).to.equal('Hi, my name is Vasiliy Pupkin.');
     });
 
     it('should return a formatted string with formatted numbers and dates', function () {
