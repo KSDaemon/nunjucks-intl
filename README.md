@@ -1,5 +1,5 @@
-[Nunjucks Intl][]
-===================
+Nunjucks Intl
+=============
 
 This library provides [Nunjucks][] helpers for internationalization. The helpers provide a declarative way
 to format dates, numbers, and string messages with pluralization support.
@@ -218,14 +218,14 @@ User data is always escaped.
 ```javascript
 Nunjucks.renderString('{{ formatMessage({ firstName: firstName, lastName: lastName, intlName: "MSG" }) }}',
     {
-        firstName: 'Anthony',
-        lastName : 'Pipkin',
+        firstName: 'Vasiliy',
+        lastName : 'Pupkin',
         intl: {
             MSG      : 'Hi, my name is {firstName} {lastName}.',
             locales: 'en-US'
         }
     });
-// output: Hi, my name is Anthony Pipkin.
+// output: Hi, my name is Vasiliy Pupkin.
 
 Nunjucks.renderString('{{ formatMessage(POP_MSG, { city: city, population: population, census_date: census_date, timeZone: timeZone }) }}',
     {
@@ -249,14 +249,14 @@ Nunjucks.renderString('{{ formatMessage(BDAY_MSG, { year: year }) }}',
 
 Nunjucks.renderString('{{ formatHTMLMessage(intlGet("MSG"), { firstName: firstName, lastName: lastName }) }}',
     {
-        firstName: '<Anthony>',
-        lastName : '<Pipkin>',
+        firstName: '<Vasiliy>',
+        lastName : '<Pupkin>',
         intl: {
             MSG : 'Hi, my <name> is {firstName} {lastName}.',
             locales: 'en-US'
         }
     });
-// output: Hi, my <name> is &lt;Anthony&gt; &lt;Pipkin&gt;.
+// output: Hi, my <name> is &lt;Vasiliy&gt; &lt;Pupkin&gt;.
 ```
 
 
@@ -278,7 +278,6 @@ This software is free to use under the BSD license.
 See the [LICENSE file][LICENSE] for license text and copyright information.
 
 
-[Nunjucks Intl]: http://formatjs.io/nunjucks/
 [Nunjucks]: http://mozilla.github.io/nunjucks
 [npm]: https://www.npmjs.org/package/nunjucks-intl
 [npm-badge]: https://img.shields.io/npm/v/nunjucks-intl.svg?style=flat-square
