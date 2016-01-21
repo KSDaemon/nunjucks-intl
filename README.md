@@ -259,8 +259,7 @@ Nunjucks.renderString('{{ formatHTMLMessage(intlGet("MSG"), { firstName: firstNa
 // output: Hi, my <name> is &lt;Vasiliy&gt; &lt;Pupkin&gt;.
 ```
 
-
-
+Also, you can lookup into [tests](tests/helpers.js) for more usage examples.
 
 Contribute
 ----------
