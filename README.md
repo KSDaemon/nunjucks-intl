@@ -7,6 +7,7 @@ to format dates, numbers, and string messages with pluralization support.
 [![npm Version][npm-badge]][npm]
 [![Build Status][travis-badge]][travis]
 [![Dependency Status][david-badge]][david]
+[![Greenkeeper badge][greenkeeper-image]][greenkeeper-url]
 
 Overview
 --------
@@ -284,6 +285,8 @@ See the [LICENSE file][LICENSE] for license text and copyright information.
 [travis-badge]: http://img.shields.io/travis/KSDaemon/nunjucks-intl.svg?style=flat-square
 [david]: https://david-dm.org/KSDaemon/nunjucks-intl
 [david-badge]: https://img.shields.io/david/KSDaemon/nunjucks-intl.svg?style=flat-square
+[greenkeeper-image]: https://badges.greenkeeper.io/KSDaemon/nunjucks-intl.svg
+[greenkeeper-url]: https://greenkeeper.io/
 [FormatJS]: http://formatjs.io/
 [FormatJS GitHub]: http://formatjs.io/github/
 [ICU Message syntax]: http://formatjs.io/guide/#messageformat-syntax
