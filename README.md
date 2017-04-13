@@ -1,6 +1,8 @@
 Nunjucks Intl
 =============
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/KSDaemon/nunjucks-intl.svg)](https://greenkeeper.io/)
+
 This library provides [Nunjucks][] helpers for internationalization. The helpers provide a declarative way
 to format dates, numbers, and string messages with pluralization support.
 
