@@ -76,10 +76,10 @@ Nunjucks enviroment.
 This is done by:
 
 ```javascript
-var nunjucks = require('nunjucks');
-var env = new nunjucks.Environment();
+const nunjucks = require('nunjucks');
+const env = nunjucks.configure();
 
-var nunjucksIntl = require('nunjucks-intl');
+const nunjucksIntl = require('nunjucks-intl');
 
 nunjucksIntl.registerWith(env);
 
