@@ -1,7 +1,7 @@
 /* jshint esnext: true */
 
 import IntlMessageFormat from 'intl-messageformat';
-import IntlRelativeFormat from 'intl-relativeformat';
+import IntlRelativeFormat from '@formatjs/intl-relativetimeformat/polyfill';
 
 import {registerWith} from './helpers.js';
 import defaultLocale from './en.js';
