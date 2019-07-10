@@ -11,8 +11,8 @@ module.exports = function (grunt) {
         copy: {
             tmp: {
                 expand: true,
-                cwd   : 'tmp/src/',
-                src   : '**/*.js',
+                cwd   : 'dist/',
+                src   : '*.js',
                 dest  : 'lib/'
             }
         },
@@ -26,10 +26,6 @@ module.exports = function (grunt) {
                     sourceMap: true
                 }
             }
-        },
-
-        jshint: {
-            all: ['index.js', 'src/*.js', '!src/en.js', 'tests/*.js']
         },
 
         benchmark: {
@@ -83,84 +79,99 @@ module.exports = function (grunt) {
             }
         },
 
-        bundle_jsnext: {
-            dest: 'dist/nunjucks-intl.js',
-
-            options: {
-                namespace : 'NunjucksIntl',
-                sourceRoot: 'nunjucks-intl/'
+        babel: {
+            srcToDist: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/',
+                    src: ['**/*.js'],
+                    dest: 'dist/'
+                }]
             }
         },
 
-        cjs_jsnext: {
-            dest: 'tmp/'
-        },
+        // browserify: {
+        //     dist4Browser: {
+        //         options     : {
+        //             transform: [['babelify', { 'presets': ['@babel/preset-env'] }]]
+        //         },
+        //         files  : {
+        //             'dist/browser/wampy.js': 'src/browser.js',
+        //             'dist/browser/msgpacksrlzr.js': 'src/msgpacksrlzrbrowser.js'
+        //         }
+        //     }
+        // },
+        //
+        //
+        // bundle_jsnext: {
+        //     dest: 'dist/nunjucks-intl.js',
+        //
+        //     options: {
+        //         namespace : 'NunjucksIntl',
+        //         sourceRoot: 'nunjucks-intl/'
+        //     }
+        // },
 
-        uglify: {
-            options: {
-                //console: false,
-                preserveComments       : 'some',
-                sourceMap              : true,
-                sourceMapRoot          : 'nunjucks-intl/',
-                sourceMapIncludeSources: true
-            },
+        // cjs_jsnext: {
+        //     dest: 'tmp/'
+        // },
 
-            dist: {
-                options: {
-                    sourceMapIn: 'dist/nunjucks-intl.js.map'
-                },
+        // uglify: {
+        //     options: {
+        //         //console: false,
+        //         preserveComments       : 'some',
+        //         sourceMap              : true,
+        //         sourceMapRoot          : 'nunjucks-intl/',
+        //         sourceMapIncludeSources: true
+        //     },
+        //
+        //     dist: {
+        //         // options: {
+        //         //     sourceMapIn: 'dist/nunjucks-intl.js.map'
+        //         // },
+        //
+        //         files: {
+        //             'dist/nunjucks-intl.min.js': [
+        //                 'dist/nunjucks-intl.js'
+        //             ]
+        //         }
+        //     },
+        //
+        //     dist_with_locales: {
+        //         // options: {
+        //         //     sourceMapIn: 'dist/nunjucks-intl-with-locales.js.map'
+        //         // },
+        //
+        //         files: {
+        //             'dist/nunjucks-intl-with-locales.min.js': [
+        //                 'dist/nunjucks-intl-with-locales.js'
+        //             ]
+        //         }
+        //     }
+        // },
 
-                files: {
-                    'dist/nunjucks-intl.min.js': [
-                        'dist/nunjucks-intl.js'
-                    ]
-                }
-            },
-
-            dist_with_locales: {
-                options: {
-                    sourceMapIn: 'dist/nunjucks-intl-with-locales.js.map'
-                },
-
-                files: {
-                    'dist/nunjucks-intl-with-locales.min.js': [
-                        'dist/nunjucks-intl-with-locales.js'
-                    ]
-                }
-            }
-        },
-
-        json_remove_fields: {
-            min_source_maps: {
-                options: {
-                    fields: ['sourceRoot']
-                },
-
-                src: 'dist/*.min.js.map'
-            }
-        }
+        // json_remove_fields: {
+        //     min_source_maps: {
+        //         options: {
+        //             fields: ['sourceRoot']
+        //         },
+        //
+        //         src: 'dist/*.min.js.map'
+        //     }
+        // }
 
     });
 
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-benchmark');
-    grunt.loadNpmTasks('grunt-bundle-jsnext-lib');
-    grunt.loadNpmTasks('grunt-extract-cldr-data');
-    grunt.loadNpmTasks('grunt-json-remove-fields');
+    require('load-grunt-tasks')(grunt);
 
     grunt.registerTask('cldr', ['extract_cldr_data']);
 
     grunt.registerTask('compile', [
-        'jshint',
-        'bundle_jsnext',
+        'babel',
         'concat:dist_with_locales',
-        'uglify',
-        'json_remove_fields',
-        'cjs_jsnext',
+        // 'uglify',
+        // 'json_remove_fields',
+        // 'cjs_jsnext',
         'copy:tmp'
     ]);
 
