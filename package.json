@@ -61,7 +61,7 @@
   "scripts": {
     "prepublish11": "grunt",
     "test": "istanbul cover -x lib/locales.js -x lib/en.js -- ./node_modules/mocha/bin/mocha --exit --require @babel/register -R spec tests/runner.js",
-    "travis": "istanbul cover -x lib/locales.js -x lib/en.js -- _mocha tests/runner.js --reporter spec"
+    "travis": "istanbul cover -x lib/locales.js -x lib/en.js -- _mocha --require @babel/register tests/runner.js --reporter spec"
   },
   "homepage": "https://github.com/KSDaemon/nunjucks-intl",
   "directories": {
