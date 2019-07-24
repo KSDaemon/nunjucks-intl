@@ -33,9 +33,9 @@
     "intl-relativeformat": "^6.4.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.5.4",
-    "@babel/preset-env": "^7.5.4",
-    "@babel/register": "^7.4.4",
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
     "babelify": "^10.0.0",
     "benchmark": "^2.1.4",
     "expect.js": "^0.3.1",
