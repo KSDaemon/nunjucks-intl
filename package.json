@@ -54,7 +54,7 @@
     "intl": "^1.2.5",
     "istanbul": "^0.4.5",
     "load-grunt-tasks": "^5.0.0",
-    "mocha": "^6.0.0",
+    "mocha": "^7.0.1",
     "nunjucks": "^3.0.0",
     "xunit-file": "1.0.0"
   },
