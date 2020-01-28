@@ -1,8 +1,9 @@
 language: node_js
 node_js:
-  - '6'
+  - '8'
   - 'node'
-script: npm run travis
+script: npm run test
+#after_script: "./node_modules/nyc/bin/nyc.js report --reporter=lcovonly && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
 notifications:
   email:
     recipients:

@@ -3,9 +3,6 @@ Copyright (c) 2014, Yahoo! Inc. All rights reserved.
 Copyrights licensed under the New BSD License.
 See the accompanying LICENSE file for terms.
 */
-export {extend};
-
-// -----------------------------------------------------------------------------
 
 function extend(obj) {
     var sources = Array.prototype.slice.call(arguments, 1),
@@ -24,3 +21,5 @@ function extend(obj) {
 
     return obj;
 }
+
+export {extend};
