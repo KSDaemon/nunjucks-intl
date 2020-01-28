@@ -10,7 +10,6 @@ Copyright (c) 2014, Yahoo! Inc. All rights reserved.
 Copyrights licensed under the New BSD License.
 See the accompanying LICENSE file for terms.
 */
-// -----------------------------------------------------------------------------
 function extend(obj) {
   var sources = Array.prototype.slice.call(arguments, 1),
       i,
