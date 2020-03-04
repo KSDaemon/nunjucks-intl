@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "intl-format-cache": "^4.2.21",
-    "intl-messageformat": "^7.8.4",
+    "intl-messageformat": "^8.0.0",
     "intl-relativeformat": "^6.4.3"
   },
   "devDependencies": {
