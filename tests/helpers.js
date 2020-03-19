@@ -411,22 +411,22 @@ describe('Helper `formatHTMLMessage`', function () {
                 firstName: '<Anthony>',
                 lastName : '<Pipkin>',
                 intl: {
-                    MSG : 'Hi, my <name> is {firstName} {lastName}.',
+                    MSG : 'Hi, my &lt;name&gt; is {firstName} {lastName}.',
                     locales: 'en-US'
                 }
             });
-        expect(tmpl).to.equal('Hi, my <name> is &lt;Anthony&gt; &lt;Pipkin&gt;.');
+        expect(tmpl).to.equal('Hi, my &lt;name&gt; is &lt;Anthony&gt; &lt;Pipkin&gt;.');
 
         tmpl = Nunjucks.renderString('{{ formatHTMLMessage({ firstName: firstName, lastName: lastName, intlName: "MSG" }) }}',
             {
                 firstName: '<Anthony>',
                 lastName : '<Pipkin>',
                 intl: {
-                    MSG      : 'Hi, my <name> is {firstName} {lastName}.',
+                    MSG      : 'Hi, my &lt;name&gt; is {firstName} {lastName}.',
                     locales: 'en-US'
                 }
             });
-        expect(tmpl).to.equal('Hi, my <name> is &lt;Anthony&gt; &lt;Pipkin&gt;.');
+        expect(tmpl).to.equal('Hi, my &lt;name&gt; is &lt;Anthony&gt; &lt;Pipkin&gt;.');
     });
 });
 
