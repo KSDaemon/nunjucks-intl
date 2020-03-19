@@ -41,7 +41,7 @@
     "benchmark": "^2.1.4",
     "coveralls": "^3.0.11",
     "expect.js": "^0.3.1",
-    "grunt": "^1.0.1",
+    "grunt": "^1.1.0",
     "grunt-babel": "^8.0.0",
     "grunt-benchmark": "^1.0.0",
     "grunt-bundle-jsnext-lib": "^0.5.0",
