@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('./src/nunjucks-intl');
+module.exports = require('./dist/nunjucks-intl');
