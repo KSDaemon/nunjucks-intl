@@ -60,7 +60,7 @@
     "mocha": "^10.0.0",
     "nunjucks": "^3.2.3",
     "nyc": "^15.1.0",
-    "xunit-file": "1.0.0"
+    "xunit-file": "^2.0.0"
   },
   "scripts": {
     "prepublish": "grunt",
