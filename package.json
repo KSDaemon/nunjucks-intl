@@ -67,8 +67,6 @@
     "cover": "nyc report"
   },
   "nyc": {
-    "sourceMap": false,
-    "instrument": false,
     "include": [
       "src/*.js"
     ],

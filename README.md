@@ -4,10 +4,11 @@ Nunjucks Intl
 This library provides [Nunjucks][] helpers for internationalization. The helpers provide a declarative way
 to format dates, numbers, and string messages with pluralization support.
 
-[![npm Version][npm-badge]][npm]
-[![Build Status][travis-badge]][travis]
-[![Dependency Status][david-badge]][david]
-[![Greenkeeper badge][greenkeeper-image]][greenkeeper-url]
+[![NPM version][npm-image]][npm-url]
+[![Build Status][gh-build-test-image]][gh-build-test-url]
+[![Code coverage][coveralls-image]][coveralls-url]
+[![MIT License][license-image]][license-url]
+[![Known Vulnerabilities][snyk-image]][snyk-url]
 
 Overview
 --------
@@ -279,14 +280,16 @@ See the [LICENSE file][LICENSE] for license text and copyright information.
 
 
 [Nunjucks]: http://mozilla.github.io/nunjucks
-[npm]: https://www.npmjs.org/package/nunjucks-intl
-[npm-badge]: https://img.shields.io/npm/v/nunjucks-intl.svg?style=flat-square
-[travis]: https://travis-ci.org/KSDaemon/nunjucks-intl
-[travis-badge]: http://img.shields.io/travis/KSDaemon/nunjucks-intl.svg?style=flat-square
-[david]: https://david-dm.org/KSDaemon/nunjucks-intl
-[david-badge]: https://img.shields.io/david/KSDaemon/nunjucks-intl.svg?style=flat-square
-[greenkeeper-image]: https://badges.greenkeeper.io/KSDaemon/nunjucks-intl.svg
-[greenkeeper-url]: https://greenkeeper.io/
+[npm-url]: https://www.npmjs.com/package/nunjucks-intl
+[npm-image]: https://img.shields.io/npm/v/nunjucks-intl.svg?style=flat
+[gh-build-test-url]: https://github.com/KSDaemon/nunjucks-intl/actions/workflows/build-and-test.yml
+[gh-build-test-image]: https://github.com/KSDaemon/nunjucks-intl/actions/workflows/build-and-test.yml/badge.svg
+[coveralls-url]: https://coveralls.io/github/KSDaemon/nunjucks-intl
+[coveralls-image]: https://img.shields.io/coveralls/KSDaemon/nunjucks-intl/master.svg?style=flat
+[license-image]: https://img.shields.io/badge/license-BSD-blue.svg
+[license-url]: http://opensource.org/licenses/BSD-2-Clause
+[snyk-image]: https://snyk.io/test/github/KSDaemon/nunjucks-intl/badge.svg?targetFile=package.json
+[snyk-url]: https://snyk.io/test/github/KSDaemon/nunjucks-intl?targetFile=package.json
 [FormatJS]: http://formatjs.io/
 [FormatJS GitHub]: http://formatjs.io/github/
 [ICU Message syntax]: http://formatjs.io/guide/#messageformat-syntax
