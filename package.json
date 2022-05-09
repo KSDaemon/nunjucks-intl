@@ -27,6 +27,9 @@
     "./lib/locales": false,
     "./lib/locales.js": false
   },
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "dependencies": {
     "intl-format-cache": "^4.2.26",
     "intl-messageformat": "^8.3.9",
