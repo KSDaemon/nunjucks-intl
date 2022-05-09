@@ -62,12 +62,14 @@
   },
   "scripts": {
     "prepublish": "grunt",
-    "test": "NODE_ENV=test nyc ./node_modules/mocha/bin/mocha --exit --require @babel/register -R spec tests/runner.js",
+    "test": "NODE_ENV=test nyc mocha --exit --require @babel/register -R spec tests/runner.js",
     "cover": "nyc report"
   },
   "nyc": {
     "include": [
-      "src/*.js"
+      "index.js",
+      "src/*.js",
+      "dist/*.js"
     ],
     "report-dir": "./coverage",
     "temp-dir": "./coverage",
