@@ -52,7 +52,6 @@
     "grunt-contrib-jshint": "^2.0.0",
     "grunt-contrib-uglify": "^4.0.0",
     "grunt-extract-cldr-data": "^4.1.0",
-    "grunt-json-remove-fields": "git://github.com/ericf/grunt-json-remove-fields#improve-files-and-output",
     "intl": "^1.2.5",
     "istanbul": "^0.4.5",
     "load-grunt-tasks": "^5.1.0",
